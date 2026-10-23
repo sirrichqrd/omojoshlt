@@ -1,0 +1,63 @@
+{
+  "name": "Omojosh Loan Tracker",
+  "short_name": "Omojosh",
+  "description": "Track loans, repayments and clients offline. Fast, private, and always available.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "display_override": [
+    "window-controls-overlay",
+    "standalone",
+    "minimal-ui"
+  ],
+  "orientation": "any",
+  "theme_color": "#0F172A",
+  "background_color": "#0F172A",
+  "lang": "en",
+  "dir": "ltr",
+  "categories": [
+    "finance",
+    "business",
+    "productivity"
+  ],
+  "icons": [
+    {
+      "src": "assets/icon/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/icon/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "New Loan",
+      "short_name": "New Loan",
+      "description": "Create a new loan entry",
+      "url": "./index.html#new-loan",
+      "icons": [
+        {
+          "src": "assets/icon/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Tracker",
+      "short_name": "Tracker",
+      "description": "View repayment tracker",
+      "url": "./index.html#tracker",
+      "icons": [
+        {
+          "src": "assets/icon/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    }
+  ]
+}

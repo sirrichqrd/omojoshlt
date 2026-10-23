@@ -1,0 +1,1194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0F172A">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="description" content="Omojosh Loan Tracker — track loans, repayments and clients offline.">
+<title>Omojosh | Loan Tracker</title>
+<link rel="manifest" href="./manifest.json">
+<link rel="apple-touch-icon" href="./icon-192.png">
+<link rel="icon" type="image/png" sizes="192x192" href="./icon-192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="./icon-512.png">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%230F172A'/><path d='M32 65 L32 35 L48 35 Q60 35 60 45 Q60 55 48 55 L36 55 L60 65 L42 65 L32 57 Z' fill='%23FF6B35'/><circle cx='72' cy='38' r='6' fill='%23FFFBF5'/></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="Omojosh | Loan Tracker">
+<meta property="og:description" content="Track loans, repayments and clients offline. Fast, private, and always available.">
+<meta property="og:image" content="./assets/social-preview.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="680">
+<meta property="og:image:alt" content="Omojosh Loan Tracker - Track loans offline">
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="./assets/social-preview.png">
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<script>
+  tailwind.config = {
+    darkMode: 'class',
+    theme: {
+      extend: {
+        fontFamily: { disp: ['Bricolage Grotesque','system-ui','sans-serif'], body: ['Instrument Sans','system-ui','sans-serif'], mono: ['JetBrains Mono','monospace'] },
+        colors: { navy: '#1E1B4B', accent: '#FF6B35' },
+        borderRadius: { '4xl': '24px' }
+      }
+    }
+  }
+</script>
+
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600..800&family=Instrument+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+
+:root{
+--bg:#F4F4F9; --paper:#FFFFFF; --paper2:#F8FAFC;
+--ink:#0F172A; --mut:#64748B; --mut2:#94A3B8;
+--line:rgba(15,23,42,.08); --line2:rgba(15,23,42,.04);
+--navy:#1E1B4B; --navy2:#2E2A72; --navy3:#4338CA;
+--accent:#FF6B35; --accent2:#E85D2A; --accent-bg:#FFF0EB; --accent-ink:#9C2D0A;
+--ok:#16A34A; --ok-bg:#DCFCE7; --ok-ink:#14532D;
+--warn:#F59E0B; --warn-bg:#FEF3C7; --warn-ink:#78350F;
+--over:#EF4444; --over-bg:#FEE2E2; --over-ink:#7F1D1D;
+--info:#0EA5E9; --info-bg:#E0F2FE;
+--r-xl:24px; --r-lg:18px; --r-md:14px; --r-sm:10px;
+--sh:0 4px 20px -2px rgba(15,23,42,.05);
+--sh2:0 12px 32px -4px rgba(15,23,42,.12);
+--disp:'Bricolage Grotesque',system-ui,sans-serif;
+--body:'Instrument Sans',system-ui,sans-serif;
+--mono:'JetBrains Mono',ui-monospace,monospace;
+--sat:env(safe-area-inset-top,0px); --sab:env(safe-area-inset-bottom,0px);
+}
+[data-theme="dark"]{
+--bg:#090D16; --paper:#111827; --paper2:#1F2937;
+--ink:#F9FAFB; --mut:#9CA3AF; --mut2:#6B7280;
+--line:rgba(255,255,255,.08); --line2:rgba(255,255,255,.04);
+--navy:#1E1B4B; --navy2:#312E81; --navy3:#4338CA;
+--accent:#FF7A4D; --accent2:#FF6B35; --accent-bg:rgba(255,107,53,.14); --accent-ink:#FFB49A;
+--ok:#22C55E; --ok-bg:rgba(22,163,74,.18); --ok-ink:#86EFAC;
+--warn:#FBBF24; --warn-bg:rgba(245,158,11,.15); --warn-ink:#FDE68A;
+--over:#F87171; --over-bg:rgba(239,68,68,.15); --over-ink:#FECACA;
+--info:#38BDF8; --info-bg:rgba(14,165,233,.15);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+html,body{overflow-x:hidden}
+body{font-family:var(--body);background:var(--bg);color:var(--ink);font-size:clamp(13.5px,.35vw + 12.5px,15px);line-height:1.5;-webkit-font-smoothing:antialiased;min-height:100vh;min-height:100dvh}
+::selection{background:color-mix(in srgb,var(--navy3) 25%, transparent)}
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-thumb{background:color-mix(in srgb,var(--mut) 35%, transparent);border-radius:99px;border:3px solid var(--bg)}
+::-webkit-scrollbar-track{background:transparent}
+.disp{font-family:var(--disp)} .mono{font-family:var(--mono)}
+button{font-family:inherit;cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+input,select,textarea{font-family:inherit;color:var(--ink)}
+.wrap{max-width:1120px;margin:0 auto;padding:0 clamp(14px,4vw,24px)}
+
+/* APP LOADING SCREEN */
+#app-loader {
+  position: fixed; inset: 0; z-index: 9999;
+  background: var(--navy);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  transition: opacity 0.4s ease, visibility 0.4s ease;
+}
+#app-loader.fade-out { opacity: 0; visibility: hidden; pointer-events: none; }
+.loader-logo {
+  width: 68px; height: 68px; border-radius: 20px; background: #FF6B35;
+  display: grid; place-items: center; color: white; font-family: var(--disp);
+  font-weight: 800; font-size: 32px; box-shadow: 0 12px 32px rgba(255,107,53,0.35);
+  animation: pulse-ring 1.8s infinite cubic-bezier(0.45, 0, 0.55, 1);
+}
+@keyframes pulse-ring {
+  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255, 107, 53, 0.5); }
+  70% { transform: scale(1); box-shadow: 0 0 0 22px rgba(255, 107, 53, 0); }
+  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255, 107, 53, 0); }
+}
+
+/* Lucide integration - preserves original design */
+.ico [data-lucide], .ico{ display:inline-flex; align-items:center; justify-content:center; }
+[data-lucide]{ width:1em; height:1em; stroke-width:2.2; }
+.iconBtn [data-lucide]{ width:18px; height:18px; }
+.tab [data-lucide]{ width:16px; height:16px; }
+.search [data-lucide]{ width:16px; height:16px; }
+.actIcon [data-lucide]{ width:16px; height:16px; }
+
+/* TOPBAR */
+.topbar{position:sticky;top:0;z-index:40;background:color-mix(in srgb,var(--paper) 85%, transparent);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}
+.topbar .wrap{height:clamp(56px,8vw,64px);display:flex;align-items:center;gap:clamp(8px,2vw,16px)}
+.brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--ink);min-width:0}
+.brand-icon{width:clamp(34px,5vw,40px);height:clamp(34px,5vw,40px);border-radius:12px;background:var(--navy);display:grid;place-items:center;color:white;font-family:var(--disp);font-weight:800;font-size:clamp(16px,2.5vw,20px);flex:none}
+[data-theme="dark"] .brand-icon{background:var(--paper2);color:var(--ink);border:1px solid var(--line)}
+.brand b{font-family:var(--disp);font-weight:800;font-size:clamp(15px,2.4vw,18px);letter-spacing:-.02em;white-space:nowrap}
+.brand small{font-family:var(--mono);font-size:10px;letter-spacing:.14em;color:var(--mut);text-transform:uppercase;display:block;margin-top:-2px}
+.tbRight{margin-left:auto;display:flex;align-items:center;gap:clamp(6px,1.5vw,10px)}
+.pill{border:1px solid var(--line);background:var(--paper2);padding:7px 12px;border-radius:999px;font-family:var(--mono);font-size:clamp(9px,1.6vw,11px);letter-spacing:.06em;display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.pill .dot{width:7px;height:7px;border-radius:50%;background:var(--ok);flex:none}
+.iconBtn{width:clamp(34px,5vw,40px);height:clamp(34px,5vw,40px);border-radius:12px;border:1px solid var(--line);background:var(--paper2);display:grid;place-items:center;transition:0.2s;color:var(--ink)}
+.iconBtn:hover{background:var(--line2)}
+.iconBtn:focus-visible,.btn:focus-visible,.tab:focus-visible,.chip:focus-visible,.bnTab:focus-visible,.bnFloatBtn:focus-visible{outline:2px solid var(--navy3);outline-offset:2px}
+
+/* DESKTOP NAV */
+.nav{position:sticky;top:clamp(56px,8vw,64px);z-index:30;background:var(--bg);border-bottom:1px solid var(--line2);padding:10px 0}
+.nav .wrap{display:flex;gap:8px;align-items:center}
+.tab{padding:10px 16px;border-radius:999px;border:1px solid var(--line);background:var(--paper);font-weight:600;font-size:13px;letter-spacing:.02em;display:inline-flex;align-items:center;gap:7px;transition:.18s;color:var(--ink);white-space:nowrap}
+.tab.active{background:var(--navy);color:#fff;border-color:var(--navy)}
+[data-theme="dark"] .tab.active{background:var(--paper2);color:var(--ink);border-color:var(--line)}
+.tab .ico{font-size:14px}
+#addLoanBtn{white-space:nowrap}
+
+/* MAIN */
+.main{padding:clamp(16px,3vw,24px) 0 120px}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(10px,1.8vw,14px)}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:var(--r-xl);box-shadow:var(--sh);padding:clamp(14px,2.4vw,20px)}
+.card.dark{background:var(--navy);color:#FFFBF5;border-color:var(--navy)}
+[data-theme="dark"] .card.dark{background:var(--paper2);color:var(--ink)}
+.kpi .label{font-family:var(--mono);font-size:clamp(9px,1.5vw,10.5px);letter-spacing:.12em;text-transform:uppercase;color:var(--mut);margin-bottom:6px}
+.kpi .value{font-family:var(--disp);font-size:clamp(19px,3vw,24px);font-weight:800;letter-spacing:-.03em;overflow-wrap:anywhere}
+.kpi .sub{font-size:clamp(11px,1.7vw,12px);color:var(--mut);margin-top:2px}
+.kpi.dark .label{color:rgba(255,251,245,.6)} [data-theme="dark"] .kpi.dark .label{color:var(--mut)}
+.statusRow{display:flex;gap:10px;flex-wrap:wrap;margin:18px 0}
+.statusChip{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border-radius:999px;border:1px solid var(--line);background:var(--paper);font-weight:600;font-size:clamp(11px,1.8vw,12.5px)}
+.statusChip b{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font-size:11px;color:white;flex:none}
+.b-ok{background:var(--ok)} .b-warn{background:var(--warn)} .b-over{background:var(--over)} .b-info{background:var(--info)}
+
+.loans{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,340px),1fr));gap:clamp(10px,1.8vw,14px);margin-top:14px}
+.loanCard{border-radius:var(--r-xl);padding:clamp(14px,2.4vw,20px);background:var(--paper);border:1px solid var(--line);box-shadow:var(--sh);position:relative;overflow:hidden;transition:transform .18s, box-shadow .18s;cursor:pointer}
+@media(hover:hover){.loanCard:hover{transform:translateY(-2px);box-shadow:var(--sh2)}}
+.loanTop{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:12px}
+.avatar{width:42px;height:42px;border-radius:14px;background:var(--navy);color:white;display:grid;place-items:center;font-family:var(--disp);font-weight:800;flex:none}
+.loanMeta{min-width:0}
+.loanMeta h4{font-family:var(--disp);font-size:clamp(14px,2.2vw,16px);font-weight:700;letter-spacing:-.01em}
+.loanMeta .small{font-family:var(--mono);font-size:clamp(9.5px,1.6vw,11px);color:var(--mut);margin-top:2px;overflow-wrap:anywhere}
+.badge{padding:6px 12px;border-radius:999px;font-family:var(--mono);font-size:clamp(8.5px,1.5vw,10px);font-weight:700;letter-spacing:.08em;text-transform:uppercase;border:1px solid var(--line);white-space:nowrap;flex:none}
+.badge.paid{background:var(--ok-bg);color:var(--ok-ink);border-color:transparent}
+.badge.active{background:var(--info-bg);color:var(--info);border-color:transparent}
+.badge.due{background:var(--warn-bg);color:var(--warn-ink);border-color:transparent}
+.badge.over{background:var(--over-bg);color:var(--over-ink);border-color:transparent}
+.progress{height:8px;background:var(--line2);border-radius:99px;overflow:hidden;margin:12px 0 8px}
+.progress i{display:block;height:100%;border-radius:99px;background:var(--navy);transition:width .5s ease}
+.progress i.ok{background:var(--ok)} .progress i.warn{background:var(--warn)} .progress i.over{background:var(--over)}
+.loanStats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.statBox{background:var(--paper2);border:1px solid var(--line2);border-radius:12px;padding:10px 12px;min-width:0}
+.statBox .l{font-family:var(--mono);font-size:clamp(8.5px,1.5vw,10px);letter-spacing:.1em;text-transform:uppercase;color:var(--mut)}
+.statBox .v{font-weight:700;margin-top:2px;font-size:clamp(12px,1.9vw,13.5px);overflow-wrap:anywhere}
+.loanFoot{display:flex;justify-content:space-between;align-items:center;margin-top:14px;gap:10px;flex-wrap:wrap}
+.btn{padding:10px 16px;border-radius:999px;border:1px solid var(--line);background:var(--paper);font-weight:600;font-size:13px;display:inline-flex;align-items:center;gap:6px;transition:.15s;color:var(--ink);justify-content:center}
+.btn.primary{background:var(--navy);color:white;border-color:var(--navy)}
+.btn.accent{background:var(--accent);color:white;border-color:var(--accent)}
+@media(hover:hover){.btn:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(0,0,0,0.06)}}
+.btn:active{transform:scale(.97)}
+.btn.sm{padding:7px 12px;font-size:12px}
+
+/* TABLE */
+.tableWrap{overflow-x:auto;border-radius:var(--r-xl);border:1px solid var(--line);background:var(--paper);box-shadow:var(--sh);-webkit-overflow-scrolling:touch}
+table{width:100%;border-collapse:collapse;min-width:640px}
+th{font-family:var(--mono);font-size:clamp(9px,1.5vw,11px);letter-spacing:.1em;text-transform:uppercase;color:var(--mut);text-align:left;padding:14px 18px;border-bottom:1px solid var(--line);background:var(--paper2);white-space:nowrap;position:sticky;top:0}
+td{padding:14px 18px;border-bottom:1px solid var(--line2);font-size:clamp(12px,1.9vw,13.5px);white-space:nowrap}
+td b{white-space:nowrap}
+tr:last-child td{border-bottom:none}
+@media(hover:hover){tr:hover td{background:color-mix(in srgb,var(--bg) 60%, transparent)}}
+
+/* ACTIVITY */
+.activity{display:flex;flex-direction:column;gap:10px;margin-top:12px}
+.act{display:flex;gap:12px;padding:12px;border-radius:14px;background:var(--paper2);border:1px solid var(--line2)}
+.actIcon{width:36px;height:36px;border-radius:10px;display:grid;place-items:center;background:var(--paper);font-size:16px;flex:none}
+.act .t{font-weight:600;font-size:13px;overflow-wrap:anywhere} .act .s{font-size:12px;color:var(--mut);margin-top:2px}
+
+/* MODAL */
+.overlay{position:fixed;inset:0;background:rgba(15,23,42,.55);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);z-index:90;display:none;place-items:center;padding:18px}
+.overlay.open{display:grid}
+.modal{width:min(560px,100%);max-height:min(92vh,100dvh);overflow:auto;background:var(--paper);border-radius:24px;border:1px solid var(--line);box-shadow:var(--sh2);padding:0;overscroll-behavior:contain}
+.modalHead{padding:18px 20px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;background:var(--paper);z-index:1;border-radius:24px 24px 0 0}
+.modalHead h3{font-family:var(--disp);font-size:18px;font-weight:800}
+.modalBody{padding:20px;display:flex;flex-direction:column;gap:14px}
+.field{display:flex;flex-direction:column;gap:6px;min-width:0}
+.field label{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--mut);font-weight:600}
+.field input,.field select,.field textarea{padding:12px 14px;border-radius:14px;border:1px solid var(--line);background:var(--paper2);outline:none;font-size:14px;transition:.15s;width:100%;min-width:0}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--navy);box-shadow:0 0 0 3px color-mix(in srgb,var(--navy) 12%, transparent)}
+.field textarea{resize:vertical;min-height:72px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.modalFoot{padding:16px 20px calc(16px + var(--sab));border-top:1px solid var(--line);display:flex;justify-content:flex-end;gap:10px;position:sticky;bottom:0;background:var(--paper);border-radius:0 0 24px 24px}
+
+/* DRAWER */
+.drawer{position:fixed;inset:0 0 0 auto;width:min(480px,100%);background:var(--paper);border-left:1px solid var(--line);z-index:85;transform:translateX(102%);transition:transform .28s cubic-bezier(.2,.7,.2,1);overflow-y:auto;overscroll-behavior:contain;box-shadow:-20px 0 60px rgba(15,23,42,.15)}
+.drawer.open{transform:translateX(0)}
+.drawerHead{padding:calc(16px + var(--sat)) 20px 16px;border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--paper);z-index:1;display:flex;justify-content:space-between;align-items:center}
+.drawerBody{padding:20px 20px calc(24px + var(--sab));display:flex;flex-direction:column;gap:16px}
+.hero{border-radius:22px;background:var(--navy);color:#FFFBF5;padding:clamp(16px,3vw,20px);position:relative;overflow:hidden}
+[data-theme="dark"] .hero{background:var(--paper2);color:var(--ink);border:1px solid var(--line)}
+.hero .big{font-family:var(--disp);font-size:clamp(23px,4.5vw,28px);font-weight:800;letter-spacing:-.03em;overflow-wrap:anywhere}
+.heroGrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+.heroGrid .h{font-family:var(--mono);font-size:clamp(8.5px,1.5vw,10px);letter-spacing:.1em;text-transform:uppercase;opacity:.7}
+.heroGrid .v{font-weight:700;margin-top:2px;font-size:clamp(12px,2vw,14px);overflow-wrap:anywhere}
+.repayItem{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 14px;border-radius:14px;background:var(--paper2);border:1px solid var(--line2)}
+.repayItem .amt{font-weight:700;overflow-wrap:anywhere} .repayItem .date{font-family:var(--mono);font-size:11px;color:var(--mut)}
+
+/* === FLOATING PILL BOTTOM NAV === */
+.bottomNav{
+  display:none; position:fixed; left:0; right:0; bottom:0; z-index:50;
+  padding:0 14px calc(12px + var(--sab));
+  pointer-events:none;
+}
+.bottomNavInner{
+  pointer-events:auto;
+  max-width:420px; margin:0 auto;
+  height:64px;
+  background:radial-gradient(circle 30px at 50% 0px, transparent 29px, #14132B 30px);
+  border-radius:34px;
+  padding:0 10px;
+  display:flex; align-items:center; justify-content:space-between;
+  box-shadow:0 18px 40px rgba(15,19,42,.4), inset 0 1px 0 rgba(255,255,255,.08);
+  position:relative;
+}
+.bnTab{
+  background:none; border:none; color:rgba(255,255,255,0.45);
+  display:flex; flex-direction:column; align-items:center; gap:3px;
+  padding:6px 8px; border-radius:16px; transition:all .2s ease;
+  flex:1; cursor:pointer; font-weight:600; font-size:10px; letter-spacing:.02em;
+  position:relative; z-index:1; min-width:0;
+}
+.bnTab .bico{ font-size:18px; line-height:1; transition:transform .2s ease; display:flex; align-items:center; justify-content:center; }
+.bnTab .bico [data-lucide]{ width: 18px; height: 18px; }
+.bnTab.active{ color:#FFFFFF; }
+.bnTab.active .bico{ transform:translateY(-1px) scale(1.08); }
+.bnTab.active::after{ content:''; width:4px; height:4px; border-radius:50%; background:var(--accent); margin-top:1px; }
+.bnTab:active{ transform:scale(.94); }
+
+/* FLOATING CENTER BUTTON */
+.bnFloatingItem{ flex:1; display:flex; justify-content:center; align-items:center; margin-top:-34px; position:relative; z-index:2; }
+.bnFloatBtn{
+  width:58px; height:58px; border-radius:50%;
+  background:linear-gradient(135deg, #6D28D9 0%, #4338CA 55%, #3730A3 100%);
+  color:#FFFFFF; border:5px solid var(--bg);
+  display:grid; place-items:center; font-size:20px;
+  box-shadow:0 10px 26px rgba(109,40,217,.5), inset 0 1px 0 rgba(255,255,255,.25);
+  cursor:pointer; transition:transform .2s ease;
+}
+.bnFloatBtn [data-lucide]{ width:22px; height:22px; }
+.bnFloatBtn:active{ transform:scale(.88); }
+@media(hover:hover){.bnFloatBtn:hover{transform:translateY(-2px)}}
+
+@media(max-width:820px){
+  .bottomNav{display:block}
+  .nav .wrap .tab{display:none}
+  .main{padding-bottom:calc(118px + var(--sab))}
+  .topbar .wrap{height:56px}
+  .toastBox{bottom:calc(100px + var(--sab)) !important}
+}
+
+.waBtn{background:#25D366!important;color:white!important;border-color:#25D366!important}
+.waBtn:hover{background:#128C7E!important}
+.msgPreview{background:var(--paper2);border:1px dashed var(--line);border-radius:14px;padding:12px;font-size:12.5px;line-height:1.5;white-space:pre-wrap;overflow-wrap:anywhere}
+
+/* TOAST */
+.toastBox{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);z-index:100;display:flex;flex-direction:column;gap:8px;pointer-events:none;width:max-content;max-width:calc(100vw - 32px)}
+.toast{padding:12px 20px;border-radius:999px;background:var(--navy);color:white;font-weight:600;font-size:13px;box-shadow:var(--sh2);display:flex;align-items:center;gap:8px;animation:pop .28s ease;max-width:100%;overflow-wrap:anywhere}
+[data-theme="dark"] .toast{background:var(--paper2);color:var(--ink);border:1px solid var(--line)}
+@keyframes pop{from{transform:translateY(8px) scale(.98);opacity:0}to{transform:translateY(0) scale(1);opacity:1}}
+
+/* EMPTY */
+.empty{padding:42px 20px;text-align:center;border:1px dashed var(--line);border-radius:20px;background:var(--paper)}
+.empty .ic{width:56px;height:56px;border-radius:18px;background:var(--paper2);display:grid;place-items:center;margin:0 auto 12px;font-size:24px}
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+.chip{padding:8px 14px;border-radius:999px;border:1px solid var(--line);background:var(--paper);font-size:clamp(11px,1.8vw,12.5px);font-weight:600;cursor:pointer;transition:.15s;color:var(--ink);white-space:nowrap}
+.chip.active{background:var(--navy);color:white;border-color:var(--navy)}
+.search{position:relative;flex:1;min-width:min(220px,100%)}
+.search input{width:100%;padding:11px 14px 11px 36px;border-radius:999px;border:1px solid var(--line);background:var(--paper);font-size:14px}
+.search span{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--mut)}
+
+/* HOMEPAGE CARDS & ACTIONS */
+.homeGrid{display:grid;grid-template-columns:1.5fr .9fr;gap:clamp(10px,1.8vw,14px);margin-bottom:clamp(10px,1.8vw,14px)}
+.homeTwo{display:grid;grid-template-columns:1fr 1fr;gap:clamp(10px,1.8vw,14px)}
+.hCard{background:var(--paper);border:1px solid var(--line);border-radius:24px;box-shadow:var(--sh);padding:clamp(14px,2.4vw,20px);position:relative;overflow:hidden}
+.hCard.dark{background:linear-gradient(135deg, #1E1B4B 0%, #0F172A 100%);color:#FFFBF5;border-color:var(--navy)}
+[data-theme="dark"] .hCard.dark{background:var(--paper2);color:var(--ink)}
+.hEyebrow{font-family:var(--mono);font-size:clamp(9px,1.5vw,10.5px);letter-spacing:.12em;text-transform:uppercase;opacity:.6;margin-bottom:6px}
+.hBig{font-family:var(--disp);font-size:clamp(25px,5vw,32px);font-weight:800;letter-spacing:-.04em;line-height:1.05;overflow-wrap:anywhere}
+.spark{width:84px;height:28px;max-width:100%}
+.miniTrend{width:118px;height:36px;max-width:100%}
+.badgeSoft{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:999px;font-family:var(--mono);font-size:clamp(9.5px,1.6vw,11px);font-weight:600}
+.badgeSoft.ok{background:var(--ok-bg);color:var(--ok-ink)} .badgeSoft.over{background:var(--over-bg);color:var(--over-ink)}
+.actionsRow{display:flex;gap:12px;overflow-x:auto;padding:4px 2px 14px;margin:14px 0 18px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.actionsRow::-webkit-scrollbar{display:none}
+.actionBtn{min-width:110px;min-height:98px;border-radius:22px;border:1px solid var(--line);background:var(--paper);display:flex;flex-direction:column;align-items:flex-start;justify-content:space-between;padding:14px;cursor:pointer;box-shadow:var(--sh);transition:.18s;flex:1;color:var(--ink);text-align:left}
+@media(hover:hover){.actionBtn:hover{transform:translateY(-2px);box-shadow:var(--sh2)}}
+.actionBtn:active{transform:scale(.97)}
+.actionBtn .ic{width:36px;height:36px;border-radius:12px;display:grid;place-items:center;font-size:18px;flex:none}
+.actionBtn.pink .ic{background:#FFE4F2;color:#C0267A}
+.actionBtn.purple .ic{background:#EDE9FE;color:#6D28D9}
+.actionBtn.cream .ic{background:#FEF3C7;color:#92400E}
+.actionBtn.blue .ic{background:#E0F2FE;color:#0C4A6E}
+.secHead{display:flex;justify-content:space-between;align-items:center;margin:18px 2px 10px;gap:10px}
+.secHead h3{font-family:var(--disp);font-size:clamp(15px,2.6vw,18px);font-weight:800}
+.secHead .link{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--mut);border:1px solid var(--line);padding:6px 12px;border-radius:999px;background:var(--paper);text-decoration:none;cursor:pointer;white-space:nowrap}
+.hList{display:flex;flex-direction:column}
+.hItem{display:flex;align-items:center;gap:12px;padding:13px 4px;border-bottom:1px solid var(--line2)}
+.hItem:last-child{border:0}
+.hSym{width:40px;height:40px;border-radius:14px;background:var(--paper2);border:1px solid var(--line2);display:grid;place-items:center;font-family:var(--disp);font-weight:800;flex:none}
+.hMeta{flex:1;min-width:0} .hMeta b{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:clamp(12.5px,2vw,14px)} .hMeta span{font-size:clamp(11px,1.8vw,12px);color:var(--mut)}
+.hRight{text-align:right;flex:none} .hRight b{font-family:var(--disp);font-size:clamp(12px,2vw,13.5px);white-space:nowrap}
+
+/* entrance animation for re-rendered cards */
+@keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.card,.hCard,.loanCard{animation:rise .3s ease both}
+.loans .loanCard:nth-child(2){animation-delay:.04s}
+.loans .loanCard:nth-child(3){animation-delay:.08s}
+.loans .loanCard:nth-child(4){animation-delay:.12s}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
+}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:900px){
+  .grid4{grid-template-columns:repeat(2,1fr)}
+  .homeGrid,.homeTwo{grid-template-columns:1fr}
+}
+@media(max-width:640px){
+  .grid4{grid-template-columns:1fr 1fr;gap:8px}
+  .kpi .sub{display:none}
+  .statusChip{padding:8px 12px}
+  .heroGrid{grid-template-columns:1fr 1fr}
+  .loanStats{grid-template-columns:1fr 1fr;gap:8px}
+  .loanFoot .btn.sm{padding:6px 10px;font-size:11px}
+  .modalFoot{flex-direction:column-reverse}
+  .modalFoot .btn{width:100%}
+  #addLoanBtn{padding:8px 12px;font-size:12px}
+}
+@media(max-width:560px){
+  .row2{grid-template-columns:1fr}
+  .overlay{padding:0;place-items:end center}
+  .modal{width:100%;max-height:94dvh;border-radius:24px 24px 0 0;border-bottom:none}
+  .modalHead{border-radius:24px 24px 0 0}
+  .heroGrid{grid-template-columns:1fr 1fr}
+  .grid4{gap:8px}
+  .statBox{padding:8px 10px}
+}
+@media(max-width:380px){
+  .grid4{grid-template-columns:1fr}
+  .pill{display:none}
+  .actionsRow{gap:8px}
+  .actionBtn{min-width:96px}
+  .bnTab{font-size:9px;padding:6px 4px}
+}
+
+
+/* ===== PWA INSTALL PROMPT - SYSTEM VISUAL IDENTITY ===== */
+#pwa-install-shell{
+  position:fixed; inset:auto 16px 16px 16px; z-index:80;
+  max-width:420px; margin-left:auto;
+  pointer-events:none; opacity:0; transform:translateY(24px) scale(.98);
+  transition: all .45s cubic-bezier(.34,1.2,.64,1);
+}
+#pwa-install-shell.show{ opacity:1; transform:translateY(0) scale(1); pointer-events:auto; }
+@media(min-width:640px){ #pwa-install-shell{ left:auto; right:24px; bottom:24px; } }
+.pwa-card{
+  background:var(--paper); border:1px solid var(--line);
+  border-radius:24px; box-shadow:0 20px 50px -12px rgba(15,23,42,.22), 0 4px 16px rgba(15,23,42,.08);
+  overflow:hidden; position:relative;
+}
+.pwa-top{
+  background:var(--navy); color:#FFFBF5; padding:16px 18px 14px;
+  display:flex; align-items:center; gap:14px; position:relative;
+}
+.pwa-top::after{
+  content:''; position:absolute; bottom:-1px; left:0; right:0; height:1px;
+  background:linear-gradient(90deg, #FF6B35, transparent);
+  opacity:.6;
+}
+.pwa-icon-wrap{
+  width:48px; height:48px; border-radius:14px; background:white;
+  display:grid; place-items:center; flex:none;
+  box-shadow:0 4px 12px rgba(0,0,0,.2);
+}
+.pwa-icon-wrap img{ width:32px; height:32px; border-radius:8px; object-fit:contain; }
+.pwa-copy{ min-width:0; flex:1; }
+.pwa-copy b{ font-family:var(--disp); font-weight:800; font-size:15px; letter-spacing:-.02em; display:block; line-height:1.1; }
+.pwa-copy span{ font-family:var(--mono); font-size:10.5px; letter-spacing:.12em; text-transform:uppercase; opacity:.7; display:block; margin-top:3px; }
+.pwa-close{
+  width:32px; height:32px; border-radius:10px; border:1px solid rgba(255,255,255,.15);
+  background:rgba(255,255,255,.08); color:white; display:grid; place-items:center; flex:none;
+}
+.pwa-body{ padding:14px 18px 16px; }
+.pwa-body p{ font-size:13.5px; line-height:1.5; color:var(--mut); margin:0 0 14px; }
+.pwa-benefits{ display:flex; gap:8px; margin-bottom:16px; flex-wrap:wrap; }
+.pwa-benefit{
+  font-family:var(--mono); font-size:10px; letter-spacing:.06em; text-transform:uppercase;
+  padding:6px 10px; border-radius:999px; background:var(--paper2); border:1px solid var(--line2);
+  color:var(--mut); display:inline-flex; align-items:center; gap:5px;
+}
+.pwa-actions{ display:flex; gap:10px; }
+.pwa-actions .btn{ flex:1; justify-content:center; border-radius:14px; padding:12px 16px; font-weight:700; }
+.pwa-actions .btn.accent{ background:var(--accent); color:white; box-shadow:0 8px 20px -4px rgba(255,107,53,.45); }
+.pwa-actions .btn.accent:hover{ background:var(--accent2); transform:translateY(-1px); }
+
+/* update bar */
+#pwa-update-bar{
+  position:fixed; top:calc(64px + 12px); left:50%; transform:translateX(-50%) translateY(-20px);
+  z-index:70; background:var(--ink); color:var(--paper); border-radius:999px;
+  padding:10px 14px 10px 14px; display:flex; align-items:center; gap:12px;
+  box-shadow:var(--sh2); opacity:0; pointer-events:none; transition:.3s; font-size:13px;
+}
+#pwa-update-bar.show{ opacity:1; transform:translateX(-50%) translateY(0); pointer-events:auto; }
+#pwa-update-bar .btn{ padding:6px 12px; border-radius:999px; font-size:12px; }
+
+</style>
+</head>
+<body>
+
+<!-- LOADING SCREEN -->
+<div id="app-loader">
+  <div class="loader-logo">
+    <img rel="icon" src="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%230F172A'/><path d='M32 65 L32 35 L48 35 Q60 35 60 45 Q60 55 48 55 L36 55 L60 65 L42 65 L32 57 Z' fill='%23FF6B35'/><circle cx='72' cy='38' r='6' fill='%23FFFBF5'/></svg>">
+  </div>
+  
+  <div class="mono" style="margin-top:20px; font-size:12px; letter-spacing:0.18em; color:rgba(255,255,255,0.7); text-transform:uppercase;">Loading Loan Tracker...</div>
+  <div class="loader-bar"><i></i></div>
+</div>
+
+<div class="topbar">
+  <div class="wrap">
+    <a class="brand" href="#">
+      <div class="brand-icon">
+        <img rel="icon" src="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%230F172A'/><path d='M32 65 L32 35 L48 35 Q60 35 60 45 Q60 55 48 55 L36 55 L60 65 L42 65 L32 57 Z' fill='%23FF6B35'/><circle cx='72' cy='38' r='6' fill='%23FFFBF5'/></svg>">
+      </div>
+      <div><b id="appNameTitle">Omojosh</b><small>Loan Tracker</small></div>
+    </a>
+    <div class="tbRight">
+      <div class="pill"><span class="dot" id="dot"></span><span id="syncTxt"> LOCAL</span></div>
+      <button class="iconBtn" id="themeBtn" title="Theme"><i data-lucide="sun-moon"></i></button>
+    </div>
+  </div>
+</div>
+<div class="nav">
+  <div class="wrap">
+    <button class="tab active" data-tab="HOME"><i data-lucide="layout-dashboard" class="ico"></i> HOME</button>
+    <button class="tab" data-tab="TRACKER"><i data-lucide="activity" class="ico"></i> TRACKER</button>
+    <button class="tab" data-tab="LOAN"><i data-lucide="wallet" class="ico"></i> LOAN</button>
+    <button class="tab" data-tab="ADMIN"><i data-lucide="settings" class="ico"></i> ADMIN</button>
+    <div style="margin-left:auto;display:flex;gap:8px">
+      <button class="btn primary" id="addLoanBtn">+ Add Loan</button>
+    </div>
+  </div>
+</div>
+
+<main class="main">
+  <div class="wrap" id="app"></div>
+</main>
+
+<!-- MODALS -->
+<div class="overlay" id="loanModal">
+  <div class="modal">
+    <div class="modalHead"><h3 id="loanModalTitle">Add Loan</h3><button class="iconBtn" onclick="closeLoanModal()"><i data-lucide="x"></i></button></div>
+    <div class="modalBody">
+      <div class="row2">
+        <div class="field"><label>Client Name</label><input id="f_name" placeholder="John Doe"></div>
+        <div class="field"><label>Phone (WhatsApp)</label><input id="f_phone" type="tel" placeholder="0803 123 4567"></div>
+      </div>
+      <div class="row2">
+        <div class="field"><label>Amount Borrowed (₦)</label><input id="f_amount" type="number" placeholder="100000"></div>
+        <div class="field"><label>Interest Type</label>
+          <select id="f_itype"><option value="fixed">Fixed (one-time %)</option><option value="monthly">Monthly (% per month)</option></select>
+        </div>
+      </div>
+      <div class="row2">
+        <div class="field"><label id="f_rate_label">Interest Rate %</label><input id="f_rate" type="number" value="20"></div>
+        <div class="field" id="durationField" style="display:none"><label>Duration (months)</label><input id="f_duration" type="number" value="3" min="1"></div>
+      </div>
+      <div class="row2">
+        <div class="field"><label>Date Borrowed</label><input id="f_borrowed" type="date"></div>
+        <div class="field"><label>Due Date</label><input id="f_due" type="date"></div>
+      </div>
+      <div class="field"><label>Note (optional)</label><textarea id="f_note" placeholder="ID, guarantor, collateral..."></textarea></div>
+      <div class="card" id="previewCard" style="background:var(--paper2);border-style:dashed">
+        <div class="mono" style="font-size:11px;color:var(--mut);letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px">Preview Calculation</div>
+        <div id="previewText" class="mono" style="font-size:13px;line-height:1.6"></div>
+      </div>
+    </div>
+    <div class="modalFoot">
+      <button class="btn" onclick="closeLoanModal()">Cancel</button>
+      <button class="btn accent" id="saveLoanBtn">Save Loan</button>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="repayModal">
+  <div class="modal">
+    <div class="modalHead"><h3>Add Repayment</h3><button class="iconBtn" onclick="closeRepayModal()"><i data-lucide="x"></i></button></div>
+    <div class="modalBody">
+      <div class="card" id="repayLoanInfo" style="background:var(--paper2)"></div>
+      <div class="field"><label>Amount Paid (₦)</label><input id="r_amount" type="number" placeholder="20000"></div>
+      <div class="row2">
+        <div class="field"><label>Method</label><select id="r_method"><option>Cash</option><option>Transfer</option><option>POS</option><option>Cheque</option></select></div>
+        <div class="field"><label>Date</label><input id="r_date" type="date"></div>
+      </div>
+    </div>
+    <div class="modalFoot">
+      <button class="btn" onclick="closeRepayModal()">Cancel</button>
+      <button class="btn accent" id="saveRepayBtn">Add Payment</button>
+    </div>
+  </div>
+</div>
+
+<div class="drawer" id="drawer"></div>
+
+<!-- FLOATING PILL BOTTOM NAV (LUCIDE INTEGRATED) -->
+<div class="bottomNav" id="bottomNav">
+  <div class="bottomNavInner">
+    <button class="bnTab active" data-btab="HOME" onclick="setTab('HOME')"><span class="bico"><i data-lucide="layout-dashboard"></i></span><span>Home</span></button>
+    <button class="bnTab" data-btab="TRACKER" onclick="setTab('TRACKER')"><span class="bico"><i data-lucide="activity"></i></span><span>Tracker</span></button>
+    <div class="bnFloatingItem">
+      <button class="bnFloatBtn" onclick="openLoanModal()" title="Add Loan"><i data-lucide="plus"></i></button>
+    </div>
+    <button class="bnTab" data-btab="LOAN" onclick="setTab('LOAN')"><span class="bico"><i data-lucide="wallet"></i></span><span>Loans</span></button>
+    <button class="bnTab" data-btab="ADMIN" onclick="setTab('ADMIN')"><span class="bico"><i data-lucide="settings"></i></span><span>Admin</span></button>
+  </div>
+</div>
+
+<div class="toastBox" id="toasts"></div>
+
+<script>
+const LS_KEY='omojosh_loan_v2';
+const SETTINGS_KEY='omojosh_settings_v2';
+
+function defaultSettings(){
+  return { appName:'Omojosh', currency:'₦', defaultRate:20, defaultType:'fixed', defaultDuration:3, graceDays:7, theme: localStorage.getItem('omojosh_theme')||'light' }
+}
+let settings = loadSettings();
+let state = loadState();
+
+function loadSettings(){
+  try{ return Object.assign(defaultSettings(), JSON.parse(localStorage.getItem(SETTINGS_KEY)||'{}')); }catch{ return defaultSettings(); }
+}
+function saveSettings(){ localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings)); localStorage.setItem('omojosh_theme', settings.theme); applyTheme(); }
+
+function loadState(){
+  try{
+    const raw = JSON.parse(localStorage.getItem(LS_KEY)||'null');
+    if(raw && raw.loans) return raw;
+  }catch{}
+  
+  // Clean Production Mode: Zero mock data
+  return {
+    loans: [],
+    activities: [],
+    activeTab: 'HOME', editingId: null, repayingId: null, filter: 'all', search: ''
+  }
+}
+function saveState(){ localStorage.setItem(LS_KEY, JSON.stringify(state)); }
+
+function fmt(n){ return settings.currency + Number(n||0).toLocaleString('en-NG'); }
+function fmtShort(n){
+  if(n>=1000000) return settings.currency + (n/1000000).toFixed(1)+'M';
+  if(n>=1000) return settings.currency + (n/1000).toFixed(0)+'K';
+  return fmt(n);
+}
+function initials(name){ return name.split(' ').map(x=>x[0]).slice(0,2).join('').toUpperCase(); }
+function calc(principal, type, rate, duration){
+  principal=Number(principal)||0; rate=Number(rate)||0; duration=Number(duration)||1;
+  let interest=0;
+  if(type==='fixed') interest = principal * rate/100;
+  else interest = principal * rate/100 * duration;
+  return {interest: Math.round(interest), total: Math.round(principal+interest)};
+}
+function daysUntil(due){ const today=new Date(); today.setHours(0,0,0,0); const d=new Date(due); d.setHours(0,0,0,0); return Math.ceil((d - today)/86400000); }
+function computeStatus(loan){
+  if(loan.balance<=0) return 'paid';
+  const du=daysUntil(loan.dueDate);
+  if(du<0) return 'overdue';
+  if(du<=settings.graceDays) return 'due_soon';
+  return 'active';
+}
+function recalcLoan(loan){
+  const c=calc(loan.principal, loan.interestType, loan.interestRate, loan.duration);
+  loan.interestAmount=c.interest; loan.totalRepayable=c.total;
+  loan.amountPaid = loan.repayments.reduce((s,r)=>s+Number(r.amount||0),0);
+  loan.balance = Math.max(0, loan.totalRepayable - loan.amountPaid);
+  loan.status = computeStatus(loan);
+}
+
+function showToast(msg, type='ok'){
+  const box=document.getElementById('toasts');
+  const el=document.createElement('div'); el.className='toast';
+  el.textContent = msg;
+  box.appendChild(el);
+  setTimeout(()=>{ el.style.opacity='0'; el.style.transform='translateY(6px)'; setTimeout(()=>el.remove(),300); },2600);
+}
+
+function applyTheme(){ document.documentElement.setAttribute('data-theme', settings.theme); document.getElementById('appNameTitle').textContent=settings.appName; }
+applyTheme();
+
+let activeTab='HOME';
+function setTab(t){
+  activeTab=t;
+  document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('active', b.dataset.tab===t));
+  document.querySelectorAll('.bnTab').forEach(b=>b.classList.toggle('active', b.dataset.btab===t));
+  render();
+}
+document.querySelectorAll('.tab').forEach(b=>b.addEventListener('click',()=>setTab(b.dataset.tab)));
+document.getElementById('themeBtn').addEventListener('click',()=>{ settings.theme = settings.theme==='light'?'dark':'light'; saveSettings(); render(); });
+document.getElementById('addLoanBtn').addEventListener('click',()=>openLoanModal());
+document.getElementById('f_itype').addEventListener('change', onTypeChange);
+['f_amount','f_rate','f_duration','f_itype'].forEach(id=>document.getElementById(id).addEventListener('input', updatePreview));
+
+function onTypeChange(){
+  const t=document.getElementById('f_itype').value;
+  document.getElementById('durationField').style.display = t==='monthly'?'block':'none';
+  document.getElementById('f_rate_label').textContent = t==='monthly'?'Interest Rate % per month':'Interest Rate %';
+  updatePreview();
+}
+function updatePreview(){
+  const p=Number(document.getElementById('f_amount').value)||0;
+  const type=document.getElementById('f_itype').value;
+  const rate=Number(document.getElementById('f_rate').value)||0;
+  const dur=Number(document.getElementById('f_duration').value)||1;
+  const {interest,total}=calc(p,type,rate,dur);
+  const el=document.getElementById('previewText');
+  if(!p) { el.textContent='Enter amount to see calculation'; return; }
+  if(type==='fixed') el.innerHTML=`${fmt(p)} + ${rate}% = ${fmt(interest)}<br><b>Total Repayable = ${fmt(total)}</b>`;
+  else el.innerHTML=`${fmt(p)} × ${rate}% × ${dur} months = ${fmt(interest)}<br><b>Total Repayable = ${fmt(total)}</b>`;
+}
+
+function openLoanModal(editId=null){
+  state.editingId=editId||null;
+  const modal=document.getElementById('loanModal');
+  const title=document.getElementById('loanModalTitle');
+  if(editId){
+    const loan=state.loans.find(l=>l.id===editId);
+    if(!loan) return;
+    title.textContent='Edit Loan';
+    document.getElementById('f_name').value=loan.clientName;
+    document.getElementById('f_phone').value=loan.phone||'';
+    document.getElementById('f_amount').value=loan.principal;
+    document.getElementById('f_itype').value=loan.interestType;
+    document.getElementById('f_rate').value=loan.interestRate;
+    document.getElementById('f_duration').value=loan.duration;
+    document.getElementById('f_borrowed').value=loan.borrowedDate;
+    document.getElementById('f_due').value=loan.dueDate;
+    document.getElementById('f_note').value=loan.note||'';
+  }else{
+    title.textContent='Add Loan';
+    document.getElementById('f_name').value='';
+    document.getElementById('f_phone').value='';
+    document.getElementById('f_amount').value='';
+    document.getElementById('f_itype').value=settings.defaultType;
+    document.getElementById('f_rate').value=settings.defaultRate;
+    document.getElementById('f_duration').value=settings.defaultDuration;
+    const today=new Date().toISOString().slice(0,10);
+    const due=new Date(); due.setMonth(due.getMonth()+settings.defaultDuration);
+    document.getElementById('f_borrowed').value=today;
+    document.getElementById('f_due').value=due.toISOString().slice(0,10);
+    document.getElementById('f_note').value='';
+  }
+  onTypeChange(); updatePreview();
+  modal.classList.add('open');
+}
+function closeLoanModal(){ document.getElementById('loanModal').classList.remove('open'); state.editingId=null; }
+
+document.getElementById('saveLoanBtn').addEventListener('click', ()=>{
+  const name=document.getElementById('f_name').value.trim();
+  const phone=document.getElementById('f_phone').value.trim();
+  const principal=Number(document.getElementById('f_amount').value);
+  const interestType=document.getElementById('f_itype').value;
+  const interestRate=Number(document.getElementById('f_rate').value);
+  const duration=Number(document.getElementById('f_duration').value)||1;
+  const borrowedDate=document.getElementById('f_borrowed').value;
+  const dueDate=document.getElementById('f_due').value;
+  const note=document.getElementById('f_note').value.trim();
+  if(!name || !principal || !borrowedDate || !dueDate){ showToast('Fill all required fields'); return; }
+  const {interest,total}=calc(principal,interestType,interestRate,duration);
+  if(state.editingId){
+    const loan=state.loans.find(l=>l.id===state.editingId);
+    Object.assign(loan,{clientName:name, phone, principal, interestType, interestRate, duration, interestAmount:interest, totalRepayable:total, borrowedDate, dueDate, note});
+    recalcLoan(loan);
+    showToast('Loan updated');
+  }else{
+    const loan={
+      id:'LN-'+Date.now().toString().slice(-6),
+      clientId:'c_'+Date.now(),
+      clientName:name, phone, principal, interestType, interestRate, duration,
+      interestAmount:interest, totalRepayable:total,
+      amountPaid:0, balance:total, borrowedDate, dueDate, status:'active',
+      repayments:[], note, createdAt:Date.now()
+    };
+    recalcLoan(loan);
+    state.loans.unshift(loan);
+    state.activities.unshift({id:'act_'+Date.now(), text:`${name} took ${fmt(principal)}`, time:Date.now(), type:'new'});
+    if(state.activities.length>20) state.activities.pop();
+    showToast('Loan added');
+  }
+  saveState(); closeLoanModal(); render();
+});
+
+function openRepayModal(id){
+  const loan=state.loans.find(l=>l.id===id);
+  if(!loan) return;
+  state.repayingId=id;
+  document.getElementById('repayLoanInfo').innerHTML=`<div style="display:flex;justify-content:space-between"><div><b>${loan.clientName}</b><div class="mono" style="font-size:11px;color:var(--mut)">${loan.id} • Balance ${fmt(loan.balance)}</div></div><div class="badge ${loan.status}">${loan.status.replace('_',' ')}</div></div><div class="progress" style="margin-top:10px"><i style="width:${Math.round((loan.amountPaid/loan.totalRepayable)*100)}%"></i></div>`;
+  document.getElementById('r_amount').value='';
+  document.getElementById('r_date').value=new Date().toISOString().slice(0,10);
+  document.getElementById('repayModal').classList.add('open');
+}
+function closeRepayModal(){ document.getElementById('repayModal').classList.remove('open'); state.repayingId=null; }
+document.getElementById('saveRepayBtn').addEventListener('click', ()=>{
+  const loan=state.loans.find(l=>l.id===state.repayingId);
+  if(!loan) return;
+  const amount=Number(document.getElementById('r_amount').value);
+  const method=document.getElementById('r_method').value;
+  const date=document.getElementById('r_date').value || new Date().toISOString().slice(0,10);
+  if(!amount || amount<=0){ showToast('Enter amount'); return; }
+  loan.repayments.push({id:'r_'+Date.now(), amount, method, date, ts:new Date(date).getTime()||Date.now()});
+  recalcLoan(loan);
+  state.activities.unshift({id:'act_'+Date.now(), text:`${loan.clientName} paid ${fmt(amount)}`, time:Date.now(), type:'pay'});
+  if(loan.balance===0) state.activities.unshift({id:'act_'+Date.now()+1, text:`${loan.clientName} completed loan`, time:Date.now(), type:'paid'});
+  saveState(); closeRepayModal(); render(); openDrawer(loan.id);
+  showToast(`Payment recorded: ${fmt(amount)}`);
+});
+
+function openDrawer(id){
+  const loan=state.loans.find(l=>l.id===id);
+  if(!loan) return;
+  const du=daysUntil(loan.dueDate);
+  const pct=Math.round((loan.amountPaid/loan.totalRepayable)*100)||0;
+  const drawer=document.getElementById('drawer');
+  drawer.innerHTML=`
+    <div class="drawerHead"><h3 class="disp" style="font-weight:800">${loan.clientName}</h3><button class="iconBtn" onclick="closeDrawer()"><i data-lucide="x"></i></button></div>
+    <div class="drawerBody">
+      <div class="hero">
+        <div style="display:flex;justify-content:space-between;align-items:center"><span class="mono" style="font-size:11px;letter-spacing:.1em;opacity:.7">${loan.id}</span><span class="badge ${loan.status}" style="background:rgba(255,255,255,.15);color:white;border:none">${loan.status.replace('_',' ')}</span></div>
+        <div style="margin-top:10px;display:flex;gap:8px;align-items:center"><span class="mono" style="font-size:12px;opacity:.8">${loan.phone?`📞 ${loan.phone}`:'No phone'}</span>${loan.phone?`<button class="btn sm waBtn" onclick="openWhatsApp('${loan.id}')">WhatsApp</button>`:''}</div>
+        <div class="big" style="margin-top:10px">${fmt(loan.balance)} <span style="font-size:14px;font-weight:600;opacity:.7">REMAINING</span></div>
+        <div style="margin-top:8px;font-family:var(--mono);font-size:12px;opacity:.8">${pct}% PAID • ${fmt(loan.amountPaid)} of ${fmt(loan.totalRepayable)}</div>
+        <div class="progress" style="background:rgba(255,255,255,.18);margin-top:12px"><i style="width:${pct}%;background:${loan.status==='paid'?'var(--ok)':loan.status==='overdue'?'var(--over)':loan.status==='due_soon'?'var(--warn)':'#fff'}"></i></div>
+        <div class="heroGrid">
+          <div><div class="h">Total Borrowed</div><div class="v">${fmt(loan.principal)}</div></div>
+          <div><div class="h">Interest (${loan.interestType==='fixed'?loan.interestRate+'%':loan.interestRate+'%/mo × '+loan.duration})</div><div class="v">${fmt(loan.interestAmount)}</div></div>
+          <div><div class="h">Borrowed</div><div class="v">${loan.borrowedDate}</div></div>
+          <div><div class="h">Due ${du<0?`• ${Math.abs(du)} days overdue`:du===0?'• today':`in ${du} days`}</div><div class="v">${loan.dueDate}</div></div>
+        </div>
+      </div>
+
+      <div class="card" style="background:var(--paper2);margin-top:12px">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><div class="mono" style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--mut)">Auto WhatsApp Message • ${loan.status.replace('_',' ').toUpperCase()}</div><button class="btn sm waBtn" onclick="openWhatsApp('${loan.id}')">Send WhatsApp</button></div>
+        <div class="msgPreview" id="waPreview">PLACEHOLDER</div>
+      </div>
+
+      <div style="display:flex;gap:8px">
+        <button class="btn accent" style="flex:1" onclick="openRepayModal('${loan.id}')">+ Add Payment</button>
+        ${loan.balance>0?`<button class="btn primary" style="flex:1" onclick="markPaid('${loan.id}')">Mark as Paid</button>`:''}
+      </div>
+
+      <div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><h4 class="disp" style="font-weight:700">Repayment History</h4><span class="mono" style="font-size:11px;color:var(--mut)">${loan.repayments.length} payments</span></div>
+        ${loan.repayments.length?loan.repayments.slice().sort((a,b)=>b.ts-a.ts).map(r=>`
+          <div class="repayItem"><div><div class="amt">${fmt(r.amount)}</div><div class="mono" style="font-size:11px;color:var(--mut)">${r.method} • ${r.date}</div></div><button class="btn sm" onclick="deleteRepay('${loan.id}','${r.id}')">Delete</button></div>
+        `).join(''):`<div class="empty"><div class="ic">💸</div><div style="font-weight:600">No repayments yet</div><div style="font-size:12px;color:var(--mut);margin-top:4px">Add first payment to start tracking</div></div>`}
+      </div>
+
+      ${loan.note?`<div class="card"><div class="mono" style="font-size:11px;color:var(--mut);margin-bottom:6px">NOTE</div><div style="font-size:13px">${loan.note}</div></div>`:''}
+
+      <div style="display:flex;gap:8px">
+        <button class="btn" style="flex:1" onclick="openLoanModal('${loan.id}')">✏️ Edit</button>
+        <button class="btn" style="flex:1" onclick="if(confirm('Delete this loan?')){deleteLoan('${loan.id}')}"><i data-lucide="trash-2" class="w-4 h-4 mr-1.5"></i> Delete</button>
+      </div>
+    </div>
+  `;
+  drawer.classList.add('open');
+  if (typeof lucide !== 'undefined') lucide.createIcons();
+  const preview=document.getElementById('waPreview'); if(preview){ preview.textContent=genWhatsAppMsg(loan); }
+}
+function closeDrawer(){ document.getElementById('drawer').classList.remove('open'); }
+function markPaid(id){
+  const loan=state.loans.find(l=>l.id===id);
+  if(!loan || loan.balance<=0) return;
+  loan.repayments.push({id:'r_'+Date.now(), amount:loan.balance, method:'Settlement', date:new Date().toISOString().slice(0,10), ts:Date.now()});
+  recalcLoan(loan);
+  state.activities.unshift({id:'act_'+Date.now(), text:`${loan.clientName} completed loan`, time:Date.now(), type:'paid'});
+  saveState(); render(); openDrawer(id); showToast('Marked as Paid 🟢');
+}
+function deleteRepay(loanId, repayId){
+  const loan=state.loans.find(l=>l.id===loanId);
+  if(!loan) return;
+  loan.repayments = loan.repayments.filter(r=>r.id!==repayId);
+  recalcLoan(loan);
+  saveState(); render(); openDrawer(loanId); showToast('Payment removed');
+}
+function deleteLoan(id){
+  state.loans = state.loans.filter(l=>l.id!==id);
+  saveState(); closeDrawer(); render(); showToast('Loan deleted','warn');
+}
+
+function cleanPhone(p){ return (p||'').replace(/[^0-9+]/g,''); }
+function waLink(phone, msg){
+  let ph=cleanPhone(phone);
+  if(!ph) return null;
+  if(ph.startsWith('0')) ph='234'+ph.slice(1);
+  const encoded=encodeURIComponent(msg);
+  return `https://wa.me/${ph}?text=${encoded}`;
+}
+function genWhatsAppMsg(loan){
+  const name=loan.clientName.split(' ')[0];
+  const bal=fmt(loan.balance);
+  const total=fmt(loan.totalRepayable);
+  const paid=fmt(loan.amountPaid);
+  const due=loan.dueDate;
+  const du=daysUntil(loan.dueDate);
+  const app=settings.appName;
+  if(loan.status==='paid'){
+    return `Hello ${name} 👋\n\nThank you! Your loan of ${total} is now fully PAID.\n\nTotal Paid: ${paid}\nWe appreciate your promptness.\n\n- ${app} | Loan Tracker`;
+  }
+  if(loan.status==='overdue'){
+    return `Hello ${name} ⚠️\n\nThis is a reminder from ${app}.\nYour loan repayment is OVERDUE.\n\nAmount Due: ${bal}\nOriginal Due Date: ${due} (${Math.abs(du)} days overdue)\nTotal Repayable: ${total}\nPaid so far: ${paid}\n\nPlease arrange payment as soon as possible to avoid additional charges.\n\n- ${app}`;
+  }
+  if(loan.status==='due_soon'){
+    return `Hello ${name} 🔔\n\nFriendly reminder: Your loan is DUE SOON.\n\nBalance: ${bal}\nDue Date: ${due} (in ${du} days)\nTotal: ${total} | Paid: ${paid}\n\nKindly prepare your payment of ${bal}. Let us know if you need any assistance.\n\n- ${app}`;
+  }
+  return `Hello ${name} 👋\n\nLoan Update from ${app}:\n\nBorrowed: ${fmt(loan.principal)}\nTotal Repayable: ${total}\nPaid: ${paid}\nBalance: ${bal}\nDue Date: ${due}\nProgress: ${Math.round((loan.amountPaid/loan.totalRepayable)*100)}%\n\nThank you for staying on track!\n\n- ${app}`;
+}
+function openWhatsApp(loanId){
+  const loan=state.loans.find(l=>l.id===loanId);
+  if(!loan) return;
+  if(!loan.phone){ showToast('No phone number for this client'); openLoanModal(loan.id); return; }
+  const msg=genWhatsAppMsg(loan);
+  const link=waLink(loan.phone, msg);
+  if(link) window.open(link,'_blank');
+  else showToast('Invalid phone number');
+}
+
+function sparkPath(vals,w=86,h=28){
+  if(!vals||!vals.length) return '';
+  const min=Math.min(...vals), max=Math.max(...vals), range=Math.max(1,max-min);
+  const step=w/(vals.length-1||1);
+  return vals.map((v,i)=>`${i===0?'M':'L'}${(i*step).toFixed(1)} ${(h - ((v-min)/range)* (h-6) -3).toFixed(1)}`).join(' ');
+}
+function miniLine(vals,color){
+  const p=sparkPath(vals);
+  return `<svg class="spark" viewBox="0 0 86 28" fill="none"><path d="${p}" stroke="${color}" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+}
+function heroLine(vals){
+  const w=118,h=36; const min=Math.min(...vals),max=Math.max(...vals),range=Math.max(1,max-min);
+  const step=w/(vals.length-1||1);
+  const path=vals.map((v,i)=>`${i===0?'M':'L'}${(i*step).toFixed(1)} ${(h - ((v-min)/range)*(h-8) -4).toFixed(1)}`).join(' ');
+  return `<svg class="miniTrend" viewBox="0 0 ${w} ${h}" fill="none"><path d="${path}" stroke="#22C55E" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+}
+
+function renderHome(){
+  state.loans.forEach(recalcLoan);
+  const totalLoaned=state.loans.reduce((s,l)=>s+l.principal,0);
+  const totalExpected=state.loans.reduce((s,l)=>s+l.totalRepayable,0);
+  const totalReceived=state.loans.reduce((s,l)=>s+l.amountPaid,0);
+  const outstanding=state.loans.reduce((s,l)=>s+l.balance,0);
+  const recovery = totalExpected? (totalReceived/totalExpected*100):0;
+  const c={active:state.loans.filter(l=>l.status==='active').length, due_soon:state.loans.filter(l=>l.status==='due_soon').length, overdue:state.loans.filter(l=>l.status==='overdue').length, paid:state.loans.filter(l=>l.status==='paid').length};
+  const overdueList=state.loans.filter(l=>l.status==='overdue').slice(0,4);
+  const dueList=state.loans.filter(l=>l.status==='due_soon').slice(0,4);
+  const wishlist = overdueList.length? overdueList : dueList;
+  const topLoans=[...state.loans].sort((a,b)=>b.balance-a.balance).slice(0,5);
+  const topMovers=[...state.loans].sort((a,b)=>b.balance-a.balance).slice(0,3);
+
+  return `
+  <div class="homeGrid">
+    <div class="hCard dark">
+      <div class="hEyebrow">Portfolio value • Outstanding</div>
+      <div class="hBig">${fmt(outstanding)}</div>
+      <div style="display:flex;gap:8px;align-items:center;margin-top:10px">
+        <span class="badgeSoft ok">${recovery.toFixed(1)}% recovered</span>
+        <span class="mono" style="font-size:11px;opacity:.6">${state.loans.length} loans • ${fmt(totalReceived)} collected</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-top:14px">
+        <div><div class="mono" style="font-size:11px;opacity:.6;margin-bottom:4px">Recovery Growth</div><div style="display:flex;gap:8px;align-items:center"><b style="font-size:13px">On track</b><span style="font-size:11px;opacity:.7">+${(recovery/10).toFixed(2)}%</span></div></div>
+        ${heroLine([0,0,0,0,0,0,0,0])}
+      </div>
+      <div style="position:absolute;right:-10px;top:-10px;width:160px;height:160px;background:radial-gradient(60% 60% at 50% 50%, rgba(255,107,53,.22), transparent 70%);pointer-events:none"></div>
+    </div>
+    <div class="hCard">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px"><h4 class="disp" style="font-weight:800">Cashflow</h4><span class="mono" style="font-size:11px;color:var(--mut)">LAST 7 DAYS</span></div>
+      <svg viewBox="0 0 240 84" style="width:100%;height:84px"><path d="M0 62 Q20 58 40 48 T80 54 T120 32 T160 44 T200 22 T240 28" stroke="#6366F1" stroke-width="2.2" fill="none" stroke-linecap="round"/><circle cx="200" cy="22" r="6" fill="#6366F1" stroke="white" stroke-width="2"/><rect x="168" y="2" width="60" height="18" rx="9" fill="#0F172A"/><text x="198" y="14" text-anchor="middle" font-size="9" fill="white" font-family="JetBrains Mono">${fmt(totalReceived)}</text><g font-family="JetBrains Mono" font-size="8" fill="#94A3B8"><text x="0" y="80">Mon</text><text x="40" y="80">Tue</text><text x="80" y="80">Wed</text><text x="120" y="80">Thu</text><text x="160" y="80">Fri</text><text x="200" y="80">Sat</text></g></svg>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px"><div style="background:var(--paper2);border:1px solid var(--line2);border-radius:14px;padding:10px"><div class="mono" style="font-size:10px;color:var(--mut)">LENT</div><b class="disp">${fmtShort(totalLoaned)}</b></div><div style="background:var(--paper2);border:1px solid var(--line2);border-radius:14px;padding:10px"><div class="mono" style="font-size:10px;color:var(--mut)">EXPECTED</div><b class="disp">${fmtShort(totalExpected)}</b></div></div>
+    </div>
+  </div>
+
+  <div class="grid4">
+    <div class="card kpi"><div class="label">Active</div><div class="value">${c.active}</div><div class="sub"><span style="width:8px;height:8px;border-radius:50%;background:#0EA5E9;display:inline-block"></span> Running</div></div>
+    <div class="card kpi"><div class="label">Due Soon</div><div class="value">${c.due_soon}</div><div class="sub"><span style="width:8px;height:8px;border-radius:50%;background:#F59E0B;display:inline-block"></span> Within ${settings.graceDays}d</div></div>
+    <div class="card kpi"><div class="label">Overdue</div><div class="value" style="color:var(--over)">${c.overdue}</div><div class="sub" style="color:#EF4444">Needs action</div></div>
+    <div class="card kpi"><div class="label">Paid</div><div class="value" style="color:var(--ok)">${c.paid}</div><div class="sub">${recovery.toFixed(0)}% collected</div></div>
+  </div>
+
+  <div class="actionsRow">
+    <button class="actionBtn pink" onclick="openLoanModal()"><span class="ic">◫</span><b>Add Loan</b><span class="mono" style="font-size:10px;color:var(--mut)">Receive →</span></button>
+    <button class="actionBtn purple" onclick="setTab('LOAN')"><span class="ic">₦</span><b>Collect</b><span class="mono" style="font-size:10px;color:var(--mut)">Send →</span></button>
+    <button class="actionBtn cream" onclick="setTab('TRACKER')"><span class="ic">⇄</span><b>Swap View</b><span class="mono" style="font-size:10px;color:var(--mut)">Tracker →</span></button>
+    <button class="actionBtn blue" onclick="exportData()"><span class="ic">⤓</span><b>Export</b><span class="mono" style="font-size:10px;color:var(--mut)">Backup →</span></button>
+  </div>
+
+  <div class="homeTwo">
+    <div class="hCard">
+      <div class="secHead" style="margin-top:0"><h3>Action Priority</h3><button class="link" onclick="setTab('LOAN')">View all</button></div>
+      <div class="hList">
+        ${wishlist.length? wishlist.map(l=>{
+          const col=l.status==='overdue'?'#EF4444':'#F59E0B';
+          const vals=[l.principal/1000, l.totalRepayable/1000, l.amountPaid/1000, l.balance/1000];
+          return `<div class="hItem"><div class="hSym" style="background:${l.status==='overdue'?'#FEE2E2':'#FEF3C7'}">${initials(l.clientName)[0]}</div><div class="hMeta"><b>${l.clientName}</b><span>${l.status.toUpperCase()} • ${fmt(l.balance)} left</span></div><div class="hRight"><b>${fmt(l.totalRepayable)}</b><div style="margin-top:2px">${miniLine(vals,col)}</div></div></div>`;
+        }).join('') : `<div style="padding:22px;text-align:center;color:var(--mut)">All clear! No overdue loans 🎉</div>`}
+      </div>
+    </div>
+    <div class="hCard">
+      <div class="secHead" style="margin-top:0"><h3>Top Active Portfolios</h3><button class="link" onclick="setTab('LOAN')">Loans</button></div>
+      <div class="hList">
+        ${topLoans.length ? topLoans.map(l=>{
+          const perc=l.totalRepayable? (l.amountPaid/l.totalRepayable*100):0;
+          const col=perc>80?'#16A34A':perc>40?'#0EA5E9':'#FF6B35';
+          const vals=[l.principal/1000,(l.principal+l.interestAmount*0.5)/1000,l.totalRepayable/1000,l.amountPaid/1000];
+          return `<div class="hItem"><div class="hSym">${initials(l.clientName).slice(0,2)}</div><div class="hMeta"><b>${l.clientName}</b><span>${l.interestType} • ${l.interestRate}% • ${fmt(l.principal)}</span><div class="progress" style="margin:6px 0 0;height:4px"><i style="width:${perc.toFixed(0)}%;background:${col}"></i></div></div><div class="hRight"><b>${fmt(l.balance)}</b><div style="margin-top:2px">${miniLine(vals,col)}</div></div></div>`;
+        }).join('') : `<div style="padding:22px;text-align:center;color:var(--mut)">No active portfolios</div>`}
+      </div>
+      <div style="margin-top:12px;background:var(--paper2);border:1px dashed var(--line);border-radius:14px;padding:12px 14px;display:flex;justify-content:space-between;align-items:center"><div><div class="mono" style="font-size:10px;color:var(--mut)">PAYMENT METHODS</div><b style="font-size:13px">Bank Transfer • Cash • POS</b></div><span><i data-lucide="sun-moon"></i></span></div>
+    </div>
+  </div>
+
+  <div class="hCard" style="margin-top:14px">
+    <div style="display:flex;justify-content:space-between;align-items:center"><h3 class="disp" style="font-weight:800">Top Movers</h3><span class="mono" style="font-size:11px;color:var(--mut)">BY OUTSTANDING</span></div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px">
+      ${topMovers.length ? topMovers.map(l=>`<div style="background:var(--paper2);border:1px solid var(--line2);border-radius:14px;padding:12px"><div class="mono" style="font-size:10px;color:var(--mut)">${l.status.toUpperCase()}</div><b class="disp">${l.clientName.split(' ')[0]}</b><div style="font-size:11px;color:var(--mut)">${fmt(l.balance)}</div><div style="margin-top:6px">${miniLine([l.balance*0.6/1000,l.balance*0.8/1000,l.balance/1000], l.balance>150000?'#EF4444':'#16A34A')}</div></div>`).join('') : `<div style="grid-column:1/-1;text-align:center;color:var(--mut);padding:12px;">No active movers yet</div>`}
+    </div>
+  </div>
+  `;
+}
+
+function renderTracker(){
+  const loans=state.loans;
+  loans.forEach(recalcLoan);
+  const active=loans.filter(l=>l.status!=='paid');
+  const totalLoaned=loans.reduce((s,l)=>s+l.principal,0);
+  const totalExpected=loans.reduce((s,l)=>s+l.totalRepayable,0);
+  const totalReceived=loans.reduce((s,l)=>s+l.amountPaid,0);
+  const outstanding=loans.reduce((s,l)=>s+l.balance,0);
+  const onTrack=loans.filter(l=>l.status==='active').length;
+  const dueSoon=loans.filter(l=>l.status==='due_soon').length;
+  const overdue=loans.filter(l=>l.status==='overdue').length;
+  const paid=loans.filter(l=>l.status==='paid').length;
+
+  return `
+    <div class="grid4">
+      <div class="card dark kpi"><div class="label">Total Loaned</div><div class="value">${fmtShort(totalLoaned)}</div><div class="sub">${loans.length} loans • ${fmt(totalLoaned)}</div></div>
+      <div class="card kpi"><div class="label">Total Expected</div><div class="value">${fmtShort(totalExpected)}</div><div class="sub">Interest ${fmtShort(totalExpected-totalLoaned)}</div></div>
+      <div class="card kpi"><div class="label">Collected</div><div class="value" style="color:var(--ok)">${fmtShort(totalReceived)}</div><div class="sub">${paid} paid • ${Math.round((totalReceived/totalExpected)*100)||0}% of expected</div></div>
+      <div class="card kpi"><div class="label">Outstanding</div><div class="value" style="color:var(--over)">${fmtShort(outstanding)}</div><div class="sub">${active.length} active loans</div></div>
+    </div>
+
+    <div class="statusRow">
+      <div class="statusChip"><b class="b-info">${onTrack}</b> On Track • Active</div>
+      <div class="statusChip"><b class="b-warn">${dueSoon}</b> Due Soon (≤${settings.graceDays}d)</div>
+      <div class="statusChip"><b class="b-over">${overdue}</b> Overdue</div>
+      <div class="statusChip"><b class="b-ok">${paid}</b> Completed</div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:2fr 1fr;gap:14px;margin-top:6px">
+      <div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px"><h3 class="disp" style="font-weight:800;font-size:18px">Live Loans</h3><span class="mono" style="font-size:11px;color:var(--mut)">${active.length} active</span></div>
+        <div class="loans">
+          ${active.slice(0,8).map(loanCard).join('') || `<div class="empty" style="grid-column:1/-1"><div class="ic"><i data-lucide="inbox" class="w-8 h-8"></i></div><b>No active loans</b><div class="mono" style="font-size:12px;color:var(--mut);margin-top:4px">All caught up! Add a new loan to start.</div></div>`}
+        </div>
+        ${active.length>8?`<div style="text-align:center;margin-top:12px"><button class="btn" onclick="setTab('LOAN')">View all ${active.length} loans</button></div>`:''}
+      </div>
+      <div>
+        <div class="hCard">
+          <h4 class="disp" style="font-weight:700;margin-bottom:10px">Recent Activity</h4>
+          <div class="activity">
+            ${state.activities.slice(0,8).map(a=>`
+              <div class="act"><div class="actIcon">${a.type==='pay'?'<i data-lucide="banknote"></i>':a.type==='paid'?'<i data-lucide="check-circle-2"></i>':'<i data-lucide="sparkles"></i>'}</div><div><div class="t">${a.text}</div><div class="s">${timeAgo(a.time)}</div></div></div>
+            `).join('') || `<div style="text-align:center;color:var(--mut);font-size:12px;padding:12px;">No activity yet</div>`}
+          </div>
+        </div>
+        <div class="card" style="margin-top:12px;background:var(--navy);color:#FFFBF5">
+          <div class="mono" style="font-size:10px;letter-spacing:.12em;opacity:.6">LOAN OVERVIEW</div>
+          <div style="margin-top:10px;display:grid;grid-template-columns:1fr 1fr;gap:12px">
+            <div><div style="font-size:12px;opacity:.7">Active</div><div style="font-weight:800;font-size:20px">${active.length}</div></div>
+            <div><div style="font-size:12px;opacity:.7">Paid</div><div style="font-weight:800;font-size:20px">${paid}</div></div>
+          </div>
+          <div class="progress" style="background:rgba(255,255,255,.15);margin-top:14px"><i style="width:${paid && loans.length?Math.round(paid/loans.length*100):0}%;background:var(--ok)"></i></div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function timeAgo(ts){
+  const s=Math.floor((Date.now()-ts)/1000);
+  if(s<60) return 'just now';
+  if(s<3600) return `${Math.floor(s/60)}m ago`;
+  if(s<86400) return `${Math.floor(s/3600)}h ago`;
+  return `${Math.floor(s/86400)}d ago`;
+}
+
+function loanCard(loan){
+  const pct=Math.round((loan.amountPaid/loan.totalRepayable)*100)||0;
+  const du=daysUntil(loan.dueDate);
+  const barClass = loan.status==='paid'?'ok':loan.status==='overdue'?'over':loan.status==='due_soon'?'warn':'';
+  return `
+    <div class="loanCard" onclick="openDrawer('${loan.id}')">
+      <div class="loanTop">
+        <div style="display:flex;gap:10px;align-items:center;min-width:0">
+          <div class="avatar">${initials(loan.clientName)}</div>
+          <div class="loanMeta">
+            <h4>${loan.clientName}</h4>
+            <div class="small">${loan.id} • ${loan.interestType==='fixed'?loan.interestRate+'%':loan.interestRate+'%/mo'}</div>
+          </div>
+        </div>
+        <span class="badge ${loan.status}">${loan.status.replace('_',' ')}</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:12px;margin-top:6px">
+        <span>Balance: <b>${fmt(loan.balance)}</b></span>
+        <span style="color:var(--mut)">${pct}% Paid</span>
+      </div>
+      <div class="progress"><i class="${barClass}" style="width:${pct}%"></i></div>
+      <div class="loanStats">
+        <div class="statBox"><div class="l">Borrowed</div><div class="v">${fmt(loan.principal)}</div></div>
+        <div class="statBox"><div class="l">Due Date</div><div class="v">${loan.dueDate}</div></div>
+      </div>
+      <div class="loanFoot">
+        <span class="mono" style="font-size:11px;color:${du<0?'var(--over)':du<=settings.graceDays?'var(--warn)':'var(--mut)'}">${du<0?`${Math.abs(du)}d overdue`:du===0?'Due today':`Due in ${du}d`}</span>
+        <button class="btn sm accent" onclick="event.stopPropagation();openRepayModal('${loan.id}')">+ Pay</button>
+      </div>
+    </div>
+  `;
+}
+
+function renderLoanView(){
+  state.loans.forEach(recalcLoan);
+  let list=[...state.loans];
+  if(state.filter!=='all') list=list.filter(l=>l.status===state.filter);
+  if(state.search){
+    const q=state.search.toLowerCase();
+    list=list.filter(l=>l.clientName.toLowerCase().includes(q) || l.id.toLowerCase().includes(q) || (l.phone&&l.phone.includes(q)));
+  }
+
+  return `
+    <div style="display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap">
+      <div class="search">
+        <span><i data-lucide="search"></i></span>
+        <input placeholder="Search client name, ID, phone..." value="${state.search}" oninput="state.search=this.value;render()">
+      </div>
+      <button class="btn accent" onclick="openLoanModal()">+ New Loan</button>
+    </div>
+
+    <div class="filters">
+      <button class="chip ${state.filter==='all'?'active':''}" onclick="state.filter='all';render()">All (${state.loans.length})</button>
+      <button class="chip ${state.filter==='active'?'active':''}" onclick="state.filter='active';render()">Active (${state.loans.filter(l=>l.status==='active').length})</button>
+      <button class="chip ${state.filter==='due_soon'?'active':''}" onclick="state.filter='due_soon';render()">Due Soon (${state.loans.filter(l=>l.status==='due_soon').length})</button>
+      <button class="chip ${state.filter==='overdue'?'active':''}" onclick="state.filter='overdue';render()">Overdue (${state.loans.filter(l=>l.status==='overdue').length})</button>
+      <button class="chip ${state.filter==='paid'?'active':''}" onclick="state.filter='paid';render()">Paid (${state.loans.filter(l=>l.status==='paid').length})</button>
+    </div>
+
+    <div class="loans">
+      ${list.length? list.map(loanCard).join('') : `<div class="empty" style="grid-column:1/-1"><div class="ic"><i data-lucide="inbox" class="w-8 h-8"></i></div><b>No loans found</b><div class="mono" style="font-size:12px;color:var(--mut);margin-top:4px">Try changing filter or add a new loan</div></div>`}
+    </div>
+  `;
+}
+
+function renderAdmin(){
+  return `
+    <div style="max-width:680px;margin:0 auto;display:flex;flex-direction:column;gap:16px">
+      <div class="card">
+        <h3 class="disp" style="font-weight:800;font-size:20px;margin-bottom:14px">Application Settings</h3>
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <div class="field"><label>App Title</label><input id="s_app" value="${settings.appName}"></div>
+          <div class="row2">
+            <div class="field"><label>Currency Symbol</label><input id="s_cur" value="${settings.currency}"></div>
+            <div class="field"><label>Grace Period (days)</label><input id="s_grace" type="number" value="${settings.graceDays}"></div>
+          </div>
+          <div class="row2">
+            <div class="field"><label>Default Rate (%)</label><input id="s_rate" type="number" value="${settings.defaultRate}"></div>
+            <div class="field"><label>Default Type</label>
+              <select id="s_type"><option value="fixed" ${settings.defaultType==='fixed'?'selected':''}>Fixed</option><option value="monthly" ${settings.defaultType==='monthly'?'selected':''}>Monthly</option></select>
+            </div>
+          </div>
+          <button class="btn primary" onclick="saveAdminSettings()">Save Settings</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3 class="disp" style="font-weight:800;font-size:20px;margin-bottom:8px">Data Management</h3>
+        <p style="font-size:13px;color:var(--mut);margin-bottom:14px">Backup or clear your local database.</p>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <button class="btn" onclick="exportData()"><i data-lucide="download" class="w-4 h-4 mr-1"></i> Export Backup</button>
+          <label class="btn" style="cursor:pointer"><i data-lucide="upload" class="w-4 h-4 mr-1"></i> Import Backup <input type="file" accept=".json" style="display:none" onchange="importData(event)"></label>
+          <button class="btn" style="color:var(--over)" onclick="clearAllData()">Reset All Data</button>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function saveAdminSettings(){
+  settings.appName = document.getElementById('s_app').value.trim()||'Omojosh';
+  settings.currency = document.getElementById('s_cur').value.trim()||'₦';
+  settings.graceDays = Number(document.getElementById('s_grace').value)||7;
+  settings.defaultRate = Number(document.getElementById('s_rate').value)||20;
+  settings.defaultType = document.getElementById('s_type').value;
+  saveSettings();
+  showToast('Settings saved');
+  render();
+}
+
+function exportData(){
+  const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify({settings, state}));
+  const dlAnchorElem = document.createElement('a');
+  dlAnchorElem.setAttribute("href", dataStr);
+  dlAnchorElem.setAttribute("download", `omojosh_backup_${new Date().toISOString().slice(0,10)}.json`);
+  dlAnchorElem.click();
+}
+
+function importData(e){
+  const file = e.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = function(evt){
+    try {
+      const parsed = JSON.parse(evt.target.result);
+      if(parsed.state && parsed.settings){
+        state = parsed.state;
+        settings = parsed.settings;
+        saveState(); saveSettings();
+        render();
+        showToast('Backup restored!');
+      }
+    } catch(err){ showToast('Invalid backup file'); }
+  };
+  reader.readAsText(file);
+}
+
+function clearAllData(){
+  if(confirm('Are you sure you want to clear all loans and activities? This action cannot be undone.')){
+    localStorage.removeItem(LS_KEY);
+    state = loadState();
+    render();
+    showToast('Database reset');
+  }
+}
+
+function render(){
+  const app=document.getElementById('app');
+  if(activeTab==='HOME') app.innerHTML=renderHome();
+  else if(activeTab==='TRACKER') app.innerHTML=renderTracker();
+  else if(activeTab==='LOAN') app.innerHTML=renderLoanView();
+  else if(activeTab==='ADMIN') app.innerHTML=renderAdmin();
+  if (typeof lucide !== 'undefined') lucide.createIcons();
+}
+
+// APP INITIALIZATION
+window.addEventListener('DOMContentLoaded', ()=>{
+  render();
+  setTimeout(()=>{
+    const loader = document.getElementById('app-loader');
+    if(loader) loader.classList.add('fade-out');
+  }, 400);
+});
+</script>
+</body>
+</html>
