@@ -9,35 +9,13 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="description" content="Omojosh Loan Tracker — track loans, repayments and clients offline.">
 <title>Omojosh | Loan Tracker</title>
-<link rel="manifest" href="./manifest.json">
+<link rel="manifest" href="./manifest.webmanifest">
 <link rel="apple-touch-icon" href="./icon-192.png">
 <link rel="icon" type="image/png" sizes="192x192" href="./icon-192.png">
 <link rel="icon" type="image/png" sizes="512x512" href="./icon-512.png">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%230F172A'/><path d='M32 65 L32 35 L48 35 Q60 35 60 45 Q60 55 48 55 L36 55 L60 65 L42 65 L32 57 Z' fill='%23FF6B35'/><circle cx='72' cy='38' r='6' fill='%23FFFBF5'/></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-<!-- PRIMARY -->
-<meta name="application-name" content="Omojosh">
-<link rel="canonical" href="https://omojosh.ttosr.com/">
-
-<!-- OG - Used by WhatsApp, Facebook, LinkedIn, Telegram, Discord, Slack -->
-<meta property="og:type" content="website">
-<meta property="og:site_name" content="Omojosh">
-<meta property="og:locale" content="en_NG">
-<meta property="og:title" content="Omojosh — Loan Tracker">
-<meta property="og:description" content="Track loans, repayments and clients offline...">
-<meta property="og:url" content="https://omojosh.ttosr.com/">
-<meta property="og:image" content="https://omojosh.ttosr.com/assets/social-preview.png">
-<meta property="og:image:secure_url" content="https://omojosh.ttosr.com/assets/social-preview.png">
-<meta property="og:image:type" content="image/png">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="680">
-<meta property="og:image:alt" content="Omojosh Loan Tracker...">
-
-<!-- TWITTER / X -->
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://omojosh.ttosr.com/assets/social-preview.png">
 
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
@@ -446,6 +424,57 @@ tr:last-child td{border-bottom:none}
 #pwa-update-bar.show{ opacity:1; transform:translateX(-50%) translateY(0); pointer-events:auto; }
 #pwa-update-bar .btn{ padding:6px 12px; border-radius:999px; font-size:12px; }
 
+
+/* ===== CUSTOM PWA INSTALL PROMPT - OMOJOSH SYSTEM IDENTITY ===== */
+#pwa-custom-prompt{
+  position:fixed; left:0; right:0; bottom:0; z-index:9998;
+  padding:16px 16px calc(16px + env(safe-area-inset-bottom));
+  pointer-events:none; opacity:0; transform:translateY(110%);
+  transition: all .55s cubic-bezier(.32,1.05,.67,1);
+  display:flex; justify-content:center;
+}
+#pwa-custom-prompt.show{ opacity:1; transform:translateY(0); pointer-events:auto; }
+.pwa-prompt-card{
+  width:100%; max-width:420px;
+  background:var(--paper); border:1px solid var(--line);
+  border-radius:24px; box-shadow:0 24px 60px -12px rgba(15,23,42,.4), 0 8px 24px rgba(15,23,42,.15);
+  overflow:hidden; animation: pwa-rise .5s ease;
+}
+@keyframes pwa-rise{ from{ transform:translateY(12px) scale(.98); opacity:0 } to{ transform:translateY(0) scale(1); opacity:1 } }
+.pwa-prompt-head{
+  background:#0F172A; color:#FFFBF5;
+  padding:16px 18px; display:flex; align-items:center; gap:14px; position:relative;
+}
+.pwa-prompt-head::after{
+  content:''; position:absolute; bottom:0; left:0; right:0; height:2px;
+  background:linear-gradient(90deg, #FF6B35 0%, transparent 100%);
+}
+.pwa-prompt-icon{
+  width:48px; height:48px; border-radius:14px; background:#FFFFFF;
+  display:grid; place-items:center; flex:none;
+  box-shadow:0 4px 12px rgba(0,0,0,.25);
+}
+.pwa-prompt-icon img{ width:34px; height:34px; border-radius:8px; object-fit:contain; }
+.pwa-prompt-text{ flex:1; min-width:0; }
+.pwa-prompt-text b{ font-family:var(--disp); font-weight:800; font-size:16px; letter-spacing:-.02em; display:block; line-height:1.1; }
+.pwa-prompt-text span{ font-family:var(--mono); font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; opacity:.65; margin-top:3px; display:block; }
+.pwa-prompt-close{
+  width:32px; height:32px; border-radius:10px; border:1px solid rgba(255,255,255,.15);
+  background:rgba(255,255,255,.08); color:white; display:grid; place-items:center; cursor:pointer;
+}
+.pwa-prompt-body{ padding:16px 18px 18px; }
+.pwa-prompt-body p{ font-size:13.5px; line-height:1.55; color:var(--mut); margin:0 0 14px; }
+.pwa-prompt-badges{ display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px; }
+.pwa-badge{
+  font-family:var(--mono); font-size:10px; letter-spacing:.06em; text-transform:uppercase;
+  padding:6px 10px; border-radius:999px; background:var(--paper2); border:1px solid var(--line2);
+  color:var(--mut); display:inline-flex; align-items:center; gap:5px;
+}
+.pwa-prompt-actions{ display:flex; gap:10px; }
+.pwa-prompt-actions .btn{ flex:1; justify-content:center; border-radius:14px; padding:12px 16px; font-weight:700; font-size:14px; border:1px solid var(--line); background:var(--paper2); color:var(--ink); }
+.pwa-prompt-actions .btn.accent{ background:#FF6B35; color:white; border-color:#FF6B35; box-shadow:0 8px 20px -4px rgba(255,107,53,.5); }
+.pwa-prompt-actions .btn.accent:active{ transform:scale(.98); }
+
 </style>
 </head>
 <body>
@@ -556,6 +585,34 @@ tr:last-child td{border-bottom:none}
     </div>
     <button class="bnTab" data-btab="LOAN" onclick="setTab('LOAN')"><span class="bico"><i data-lucide="wallet"></i></span><span>Loans</span></button>
     <button class="bnTab" data-btab="ADMIN" onclick="setTab('ADMIN')"><span class="bico"><i data-lucide="settings"></i></span><span>Admin</span></button>
+  </div>
+</div>
+
+<!-- CUSTOM PWA INSTALL PROMPT - SYSTEM VISUAL IDENTITY -->
+<div id="pwa-custom-prompt" role="dialog" aria-modal="true" aria-label="Install Omojosh">
+  <div class="pwa-prompt-card">
+    <div class="pwa-prompt-head">
+      <div class="pwa-prompt-icon">
+        <img src="./icon-192.png" alt="Omojosh" onerror="this.src='./icon-512.png'">
+      </div>
+      <div class="pwa-prompt-text">
+        <b>Omojosh</b>
+        <span>Loan Tracker • Offline Ready</span>
+      </div>
+      <button class="pwa-prompt-close" id="pwa-close" aria-label="Close"><i data-lucide="x" style="width:16px;height:16px"></i></button>
+    </div>
+    <div class="pwa-prompt-body">
+      <p>Install Omojosh for instant access, offline tracking & home-screen launch. This uses your browser's install.</p>
+      <div class="pwa-prompt-badges">
+        <span class="pwa-badge"><i data-lucide="zap" style="width:12px"></i> Instant</span>
+        <span class="pwa-badge"><i data-lucide="wifi-off" style="width:12px"></i> Offline</span>
+        <span class="pwa-badge"><i data-lucide="shield-check" style="width:12px"></i> Private</span>
+      </div>
+      <div class="pwa-prompt-actions">
+        <button class="btn" id="pwa-dismiss">Not now</button>
+        <button class="btn accent" id="pwa-install">Install App</button>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -1200,5 +1257,82 @@ window.addEventListener('DOMContentLoaded', ()=>{
   }, 400);
 });
 </script>
+
+<script>
+// CUSTOM INSTALL PROMPT
+(function(){
+  const promptEl = document.getElementById('pwa-custom-prompt');
+  const installBtn = document.getElementById('pwa-install');
+  const closeBtn = document.getElementById('pwa-close');
+  const dismissBtn = document.getElementById('pwa-dismiss');
+  let deferredPrompt = null;
+
+  const DISMISS_KEY = 'omojosh_install_dismiss';
+  const isStandalone = () => window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+
+  function wasDismissed(){
+    try{
+      const d = JSON.parse(localStorage.getItem(DISMISS_KEY)||'null');
+      if(!d) return false;
+      return Date.now() - d.t < 24*60*60*1000;
+    }catch{ return false; }
+  }
+
+  function show(){
+    if(isStandalone()) { console.log('[PWA] Already standalone'); return; }
+    if(wasDismissed()) { console.log('[PWA] Dismissed recently'); return; }
+    console.log('[PWA] Showing custom prompt');
+    promptEl?.classList.add('show');
+    if(window.lucide) lucide.createIcons();
+  }
+  function hide(snooze){
+    promptEl?.classList.remove('show');
+    if(snooze) localStorage.setItem(DISMISS_KEY, JSON.stringify({t:Date.now()}));
+  }
+
+  // Capture ASAP
+  window.addEventListener('beforeinstallprompt', (e)=>{
+    console.log('[PWA] beforeinstallprompt captured');
+    e.preventDefault();
+    deferredPrompt = e;
+    setTimeout(show, 1000);
+  });
+
+  installBtn?.addEventListener('click', async ()=>{
+    if(!deferredPrompt){
+      // Fallback - no browser prompt available, show manual instructions
+      alert('To install: tap your browser menu > Add to Home Screen / Install App');
+      hide(true);
+      return;
+    }
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+    console.log('[PWA] choice', outcome);
+    hide(outcome !== 'accepted'); // snooze only if dismissed
+    deferredPrompt = null;
+  });
+
+  closeBtn?.addEventListener('click', ()=> hide(true));
+  dismissBtn?.addEventListener('click', ()=> hide(true));
+
+  window.addEventListener('appinstalled', ()=>{
+    hide(false);
+    deferredPrompt = null;
+    localStorage.removeItem(DISMISS_KEY);
+  });
+
+  window.OmojoshPWA = {
+    show: ()=>{ localStorage.removeItem(DISMISS_KEY); promptEl?.classList.remove('show'); void promptEl?.offsetWidth; show(); console.log('forced show, hasPrompt:', !!deferredPrompt); },
+    hide: ()=> hide(false),
+    hasPrompt: ()=> !!deferredPrompt,
+    isStandalone
+  };
+
+  if('serviceWorker' in navigator){
+    navigator.serviceWorker.register('./sw.js').then(()=> console.log('[PWA] SW registered')).catch(e=> console.log('[PWA] SW fail', e));
+  }
+})();
+</script>
+
 </body>
 </html>
