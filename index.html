@@ -1671,15 +1671,16 @@ function fbConfigured(){
   return isValidFbConfig(getFirebaseConfig());
 }
 /* Only these accounts may open the dashboard. Add more later if needed. */
-const AUTHORIZED_EMAILS = [' joshforrill@googlemail.com'];
+const AUTHORIZED_EMAILS = ['joshforrill@googlemail.com', 'joshforrill@gmail.com'];
 const FIREBASE_SDK = 'https://www.gstatic.com/firebasejs/10.14.1/';
 const GATE_PREVIEW = /[?&]gate=preview/.test(location.search);
 
 /* fbConfigured() now lives with the resolver above */
 function escHtml(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 function emailAllowed(email){
+  const norm = (s) => (s||'').trim().toLowerCase().replace('@googlemail.com','@gmail.com');
   const e=(email||'').toLowerCase();
-  return AUTHORIZED_EMAILS.some(a=>a.toLowerCase()===e);
+  return AUTHORIZED_EMAILS.some(a => norm(a) === e);
 }
 
 /* ---------- SYNC STATUS PILL (topbar) ---------- */
