@@ -221,6 +221,7 @@ tr:last-child td{border-bottom:none}
 .field input,.field select,.field textarea{padding:12px 14px;border-radius:14px;border:1px solid var(--line);background:var(--paper2);outline:none;font-size:14px;transition:.15s;width:100%;min-width:0}
 .field input:focus,.field select:focus,.field textarea:focus{border-color:var(--navy);box-shadow:0 0 0 3px color-mix(in srgb,var(--navy) 12%, transparent)}
 .field textarea{resize:vertical;min-height:72px}
+.hint{font-size:11px;line-height:1.5;color:var(--mut)}
 .row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .modalFoot{padding:16px 20px calc(16px + var(--sab));border-top:1px solid var(--line);display:flex;justify-content:flex-end;gap:10px;position:sticky;bottom:0;background:var(--paper);border-radius:0 0 24px 24px}
 
@@ -497,6 +498,58 @@ tr:last-child td{border-bottom:none}
 .pwa-prompt-actions .btn.accent{ background:#FF6B35; color:white; border-color:#FF6B35; box-shadow:0 8px 20px -4px rgba(255,107,53,.5); }
 .pwa-prompt-actions .btn.accent:active{ transform:scale(.98); }
 
+/* ===== SYNC PILL STATES ===== */
+.pill .dot.ok{ background:var(--ok); }
+.pill .dot.warn{ background:var(--warn); }
+.pill .dot.off{ background:var(--mut2); }
+
+/* ===== AUTH GATE (SIGN IN SCREEN) ===== */
+#authGate{
+  position:fixed; inset:0; z-index:10000; display:none;
+  align-items:center; justify-content:center;
+  background:radial-gradient(120% 90% at 50% 0%, #2E2A72 0%, #1E1B4B 45%, #0F172A 100%);
+  color:#FFFBF5; opacity:0; transition:opacity .35s ease;
+}
+#authGate.show{ opacity:1; }
+#authGate::before{ content:''; position:absolute; right:-90px; bottom:-90px; width:340px; height:340px;
+  background:radial-gradient(circle, rgba(255,107,53,.28), transparent 70%); pointer-events:none; }
+#authGate::after{ content:''; position:absolute; left:-70px; top:-70px; width:260px; height:260px;
+  background:radial-gradient(circle, rgba(99,102,241,.18), transparent 70%); pointer-events:none; }
+.gateCard{ position:relative; z-index:1; display:flex; flex-direction:column; align-items:center; text-align:center; padding:24px; width:min(420px,92vw); }
+.gateLogo img{ width:92px; height:92px; border-radius:24px; display:block;
+  box-shadow:0 20px 44px rgba(0,0,0,.38); border:1px solid rgba(255,255,255,.12); }
+.gateWord{ font-family:var(--disp); font-weight:800; font-size:clamp(40px,10vw,54px); letter-spacing:-.03em; margin-top:20px; line-height:1; }
+.gateSub{ font-family:var(--mono); font-size:11px; letter-spacing:.34em; text-transform:uppercase; color:rgba(255,251,245,.55); margin-top:12px; }
+.gateRule{ width:56px; height:3px; border-radius:99px; background:#FF6B35; margin:24px 0; }
+.gateStatus{ font-size:13.5px; color:rgba(255,251,245,.78); min-height:20px; margin-bottom:18px; overflow-wrap:anywhere; }
+.gateBtn{ display:flex; align-items:center; justify-content:center; gap:12px; width:100%; max-width:320px;
+  padding:14px 18px; border-radius:999px; border:1px solid rgba(255,255,255,.14);
+  background:#FFFFFF; color:#1F2937; font-weight:700; font-size:14.5px; font-family:var(--body);
+  transition:.2s; box-shadow:0 12px 28px rgba(0,0,0,.3); }
+.gateBtn:hover{ transform:translateY(-2px); }
+.gateBtn:active{ transform:scale(.98); }
+.gateBtn:disabled{ opacity:.55; cursor:not-allowed; transform:none; }
+.gateBtn svg{ width:20px; height:20px; flex:none; }
+.gateMsg{ margin-top:16px; font-size:13px; line-height:1.6; color:rgba(255,251,245,.85); max-width:340px; overflow-wrap:anywhere; }
+.gateMsg b{ color:#fff; }
+.gateMsg.err{ color:#FCA5A5; }
+.gateMsg a{ color:#FFB49A; font-weight:700; }
+.gateFoot{ position:absolute; left:0; right:0; bottom:calc(18px + var(--sab)); text-align:center;
+  font-family:var(--mono); font-size:10px; letter-spacing:.16em; text-transform:uppercase; color:rgba(255,251,245,.42); }
+
+/* ===== ADMIN: SETUP + ACCOUNT CARDS ===== */
+.setupCard{ border-style:dashed; }
+.setupCard summary{ cursor:pointer; font-weight:800; font-family:var(--disp); font-size:16px; list-style:none; display:flex; align-items:center; gap:10px; }
+.setupCard summary::-webkit-details-marker{ display:none; }
+.setupCard summary::after{ content:'+'; margin-left:auto; font-family:var(--mono); color:var(--mut); }
+.setupCard[open] summary::after{ content:'−'; }
+.setupCard p{ font-size:13px; color:var(--mut); margin-top:14px; line-height:1.55; }
+.setupCard ol{ margin:12px 0 0 18px; font-size:13px; color:var(--mut); display:flex; flex-direction:column; gap:8px; line-height:1.5; }
+.setupCard pre{ background:var(--paper2); border:1px solid var(--line); border-radius:12px; padding:12px 14px;
+  font-family:var(--mono); font-size:11px; line-height:1.5; overflow-x:auto; white-space:pre; color:var(--ink); margin-top:10px; }
+.copyRow{ display:flex; justify-content:space-between; align-items:center; margin-top:16px; gap:10px; }
+.copyRow .mono{ font-size:10px; color:var(--mut); letter-spacing:.1em; }
+
 </style>
 </head>
 <body>
@@ -562,7 +615,7 @@ tr:last-child td{border-bottom:none}
       </div>
       <div class="row2">
         <div class="field"><label>Date Borrowed</label><input id="f_borrowed" type="date"></div>
-        <div class="field"><label>Due Date</label><input id="f_due" type="date"></div>
+        <div class="field"><label>Due Date (optional)</label><input id="f_due" type="date"><div class="hint">Leave empty &rarr; auto due 30 days after borrowing. If unpaid, the interest tops up again every 30 days on the deficit left.</div></div>
       </div>
       <div class="field"><label>Note (optional)</label><textarea id="f_note" placeholder="ID, guarantor, collateral..."></textarea></div>
       <div class="card" id="previewCard" style="background:var(--paper2);border-style:dashed">
@@ -638,6 +691,25 @@ tr:last-child td{border-bottom:none}
   </div>
 </div>
 
+<!-- AUTH GATE - SIGN IN SCREEN (shown when Firebase is configured and user is not signed in) -->
+<div id="authGate" role="dialog" aria-modal="true" aria-label="Sign in to Omojosh">
+  <div class="gateCard">
+    <div class="gateLogo">
+      <img src="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%230F172A'/><path d='M32 65 L32 35 L48 35 Q60 35 60 45 Q60 55 48 55 L36 55 L60 65 L42 65 L32 57 Z' fill='%23FF6B35'/><circle cx='72' cy='38' r='6' fill='%23FFFBF5'/></svg>" alt="Omojosh logo">
+    </div>
+    <div class="gateWord">omojosh</div>
+    <div class="gateSub">Loan Tracker</div>
+    <div class="gateRule"></div>
+    <div class="gateStatus" id="gateStatus">Connecting secure sign-in...</div>
+    <button class="gateBtn" id="googleSignInBtn" disabled>
+      <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h11.94c-.52 2.88-2.11 5.28-4.47 6.87l7.82 6.06C43.07 38.29 46.98 31.94 46.98 24.55z"/><path fill="#FBBC05" d="M10.53 28.59c-.25-.75-.38-1.54-.38-2.34s.14-1.59.38-2.34l-7.98-6.19C.92 20.46 0 23.12 0 26.25c0 3.13.92 5.79 2.56 8.19l7.97-5.85z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.82-6.06c-2.06 1.39-4.69 2.21-8.07 2.21-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+      <span>Sign in with Google</span>
+    </button>
+    <div class="gateMsg" id="gateMsg"></div>
+  </div>
+  <div class="gateFoot">Authorised access &middot; joshforrill@gmail.com</div>
+</div>
+
 <div class="toastBox" id="toasts"></div>
 
 <script>
@@ -684,19 +756,76 @@ function calc(principal, type, rate, duration){
   else interest = principal * rate/100 * duration;
   return {interest: Math.round(interest), total: Math.round(principal+interest)};
 }
-function daysUntil(due){ const today=new Date(); today.setHours(0,0,0,0); const d=new Date(due); d.setHours(0,0,0,0); return Math.ceil((d - today)/86400000); }
+function daysUntil(due){ if(!due) return null; const today=new Date(); today.setHours(0,0,0,0); const d=new Date(due); d.setHours(0,0,0,0); return Math.ceil((d - today)/86400000); }
+
+/* ---------- OVERDUE INTEREST ENGINE ----------
+   - No due date      -> auto due = date borrowed + 30 days (one month).
+   - Overdue cycles   -> every completed 30-day period past the due date
+                         with money still owed tops the interest up again
+                         (Mr E: 1M @ 20% -> 1.2M -> 1.4M -> 1.6M ...).
+   - Part payment     -> payments reduce the principal deficit and the
+                         interest proportionally, so the next top-up is
+                         recalculated on the deficit (pay half -> next
+                         top-up is half the interest).
+   - Due date is set  -> same 30-day cycle logic, measured from that date. */
+const PENALTY_CYCLE_DAYS = 30;
+function isoDay(d){ return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+function effectiveDueDate(loan){
+  if(loan.dueDate) return loan.dueDate;
+  const base=loan.borrowedDate||isoDay(new Date(loan.createdAt||Date.now()));
+  const d=new Date(base+'T00:00:00');
+  if(isNaN(d)) return isoDay(new Date());
+  d.setDate(d.getDate()+PENALTY_CYCLE_DAYS);
+  return isoDay(d);
+}
+function daysOverdue(loan){ return -daysUntil(effectiveDueDate(loan)); }
+/* Replays the payment timeline against the 30-day overdue cycles so the
+   accrued late interest is always derived, never stored stale. */
+function simulateLoan(loan, originalInterest, cycleBase){
+  const P0=Number(loan.principal)||0;
+  const dueT=new Date(effectiveDueDate(loan)+'T00:00:00').getTime();
+  const today=new Date(); today.setHours(0,0,0,0);
+  const todayT=today.getTime();
+  const pays=(loan.repayments||[]).map(r=>{
+    let t=r.date?new Date(String(r.date).length<=10?r.date+'T00:00:00':r.date).getTime():NaN;
+    if(isNaN(t)) t=r.ts||0;
+    return {amt:Number(r.amount)||0, t};
+  }).filter(p=>p.amt>0).sort((a,b)=>a.t-b.t);
+  let pOut=P0, iOut=originalInterest, penalty=0, cycles=0, k=0, pi=0;
+  const applyPay=(X)=>{ const B=pOut+iOut; if(B>0 && X>0){ const cut=Math.min(1,X/B); pOut*=(1-cut); iOut*=(1-cut); } };
+  for(; k<=1500; k++){
+    const cyc=dueT + k*PENALTY_CYCLE_DAYS*86400000;
+    if(cyc>=todayT) break; // a top-up lands once its 30-day window has fully passed
+    while(pi<pays.length && pays[pi].t<=cyc){ applyPay(pays[pi].amt); pi++; }
+    if(pOut+iOut>0 && P0>0 && cycleBase>0){
+      const add=cycleBase*(pOut/P0);
+      penalty+=add; iOut+=add; cycles=k+1;
+    }
+  }
+  while(pi<pays.length){ applyPay(pays[pi].amt); pi++; }
+  return { penalty:Math.round(penalty), cycles, principalOutstanding:Math.round(pOut) };
+}
 function computeStatus(loan){
   if(loan.balance<=0) return 'paid';
-  const du=daysUntil(loan.dueDate);
+  const du=daysUntil(loan.effectiveDue||effectiveDueDate(loan));
+  if(du===null) return 'active';
   if(du<0) return 'overdue';
   if(du<=settings.graceDays) return 'due_soon';
   return 'active';
 }
 function recalcLoan(loan){
   const c=calc(loan.principal, loan.interestType, loan.interestRate, loan.duration);
-  loan.interestAmount=c.interest; loan.totalRepayable=c.total;
+  const cycleBase = loan.interestType==='monthly' ? Math.round((Number(loan.principal)||0)*loan.interestRate/100) : c.interest;
+  const sim=simulateLoan(loan, c.interest, cycleBase);
+  loan.effectiveDue=effectiveDueDate(loan);
+  loan.penaltyAccrued=sim.penalty;
+  loan.penaltyCycles=sim.cycles;
+  loan.principalOutstanding=sim.principalOutstanding;
+  loan.interestAmount=c.interest + sim.penalty;
+  loan.totalRepayable=loan.principal + loan.interestAmount;
   loan.amountPaid = loan.repayments.reduce((s,r)=>s+Number(r.amount||0),0);
   loan.balance = Math.max(0, loan.totalRepayable - loan.amountPaid);
+  loan.nextPenalty = (loan.balance>0 && cycleBase>0 && Number(loan.principal)>0) ? Math.round(cycleBase*(sim.principalOutstanding/loan.principal)) : 0;
   loan.status = computeStatus(loan);
 }
 
@@ -722,7 +851,7 @@ document.querySelectorAll('.tab').forEach(b=>b.addEventListener('click',()=>setT
 document.getElementById('themeBtn').addEventListener('click',()=>{ settings.theme = settings.theme==='light'?'dark':'light'; saveSettings(); render(); });
 document.getElementById('addLoanBtn').addEventListener('click',()=>openLoanModal());
 document.getElementById('f_itype').addEventListener('change', onTypeChange);
-['f_amount','f_rate','f_duration','f_itype'].forEach(id=>document.getElementById(id).addEventListener('input', updatePreview));
+['f_amount','f_rate','f_duration','f_itype','f_borrowed','f_due'].forEach(id=>document.getElementById(id).addEventListener('input', updatePreview));
 
 function onTypeChange(){
   const t=document.getElementById('f_itype').value;
@@ -740,6 +869,15 @@ function updatePreview(){
   if(!p) { el.textContent='Enter amount to see calculation'; return; }
   if(type==='fixed') el.innerHTML=`${fmt(p)} + ${rate}% = ${fmt(interest)}<br><b>Total Repayable = ${fmt(total)}</b>`;
   else el.innerHTML=`${fmt(p)} × ${rate}% × ${dur} months = ${fmt(interest)}<br><b>Total Repayable = ${fmt(total)}</b>`;
+  const borrowed=document.getElementById('f_borrowed').value;
+  const due=document.getElementById('f_due').value;
+  if(borrowed||due){
+    let when;
+    if(due){ when='Due '+due; }
+    else { const d=new Date((borrowed||isoDay(new Date()))+'T00:00:00'); d.setDate(d.getDate()+PENALTY_CYCLE_DAYS); when='No due date → auto due '+isoDay(d); }
+    const base=type==='fixed'?interest:Math.round(p*rate/100);
+    el.innerHTML+=`<span style="display:block;margin-top:8px;color:var(--warn-ink);background:var(--warn-bg);border-radius:10px;padding:8px 10px;font-size:12px;line-height:1.5">⚠ ${when}. Unpaid after that? ${fmt(base)} is added to the interest again every 30 days — recalculated on the deficit after any part-payment.</span>`;
+  }
 }
 
 function openLoanModal(editId=null){
@@ -757,7 +895,7 @@ function openLoanModal(editId=null){
     document.getElementById('f_rate').value=loan.interestRate;
     document.getElementById('f_duration').value=loan.duration;
     document.getElementById('f_borrowed').value=loan.borrowedDate;
-    document.getElementById('f_due').value=loan.dueDate;
+    document.getElementById('f_due').value=loan.dueDate||'';
     document.getElementById('f_note').value=loan.note||'';
   }else{
     title.textContent='Add Loan';
@@ -767,10 +905,9 @@ function openLoanModal(editId=null){
     document.getElementById('f_itype').value=settings.defaultType;
     document.getElementById('f_rate').value=settings.defaultRate;
     document.getElementById('f_duration').value=settings.defaultDuration;
-    const today=new Date().toISOString().slice(0,10);
-    const due=new Date(); due.setMonth(due.getMonth()+settings.defaultDuration);
+    const today=isoDay(new Date());
     document.getElementById('f_borrowed').value=today;
-    document.getElementById('f_due').value=due.toISOString().slice(0,10);
+    document.getElementById('f_due').value=''; // due date is optional
     document.getElementById('f_note').value='';
   }
   onTypeChange(); updatePreview();
@@ -788,11 +925,11 @@ document.getElementById('saveLoanBtn').addEventListener('click', ()=>{
   const borrowedDate=document.getElementById('f_borrowed').value;
   const dueDate=document.getElementById('f_due').value;
   const note=document.getElementById('f_note').value.trim();
-  if(!name || !principal || !borrowedDate || !dueDate){ showToast('Fill all required fields'); return; }
+  if(!name || !principal || !borrowedDate){ showToast('Fill name, amount and date borrowed'); return; }
   const {interest,total}=calc(principal,interestType,interestRate,duration);
   if(state.editingId){
     const loan=state.loans.find(l=>l.id===state.editingId);
-    Object.assign(loan,{clientName:name, phone, principal, interestType, interestRate, duration, interestAmount:interest, totalRepayable:total, borrowedDate, dueDate, note});
+    Object.assign(loan,{clientName:name, phone, principal, interestType, interestRate, duration, interestAmount:interest, totalRepayable:total, borrowedDate, dueDate: dueDate||'', phoneDigits: phone.replace(/[^0-9]/g,''), note});
     recalcLoan(loan);
     showToast('Loan updated');
   }else{
@@ -801,7 +938,7 @@ document.getElementById('saveLoanBtn').addEventListener('click', ()=>{
       clientId:'c_'+Date.now(),
       clientName:name, phone, principal, interestType, interestRate, duration,
       interestAmount:interest, totalRepayable:total,
-      amountPaid:0, balance:total, borrowedDate, dueDate, status:'active',
+      amountPaid:0, balance:total, borrowedDate, dueDate: dueDate||'', phoneDigits: phone.replace(/[^0-9]/g,''), status:'active',
       repayments:[], note, createdAt:Date.now()
     };
     recalcLoan(loan);
@@ -819,7 +956,7 @@ function openRepayModal(id){
   state.repayingId=id;
   document.getElementById('repayLoanInfo').innerHTML=`<div style="display:flex;justify-content:space-between"><div><b>${loan.clientName}</b><div class="mono" style="font-size:11px;color:var(--mut)">${loan.id} • Balance ${fmt(loan.balance)}</div></div><div class="badge ${loan.status}">${loan.status.replace('_',' ')}</div></div><div class="progress" style="margin-top:10px"><i style="width:${Math.round((loan.amountPaid/loan.totalRepayable)*100)}%"></i></div>`;
   document.getElementById('r_amount').value='';
-  document.getElementById('r_date').value=new Date().toISOString().slice(0,10);
+  document.getElementById('r_date').value=isoDay(new Date());
   document.getElementById('repayModal').classList.add('open');
 }
 function closeRepayModal(){ document.getElementById('repayModal').classList.remove('open'); state.repayingId=null; }
@@ -828,7 +965,7 @@ document.getElementById('saveRepayBtn').addEventListener('click', ()=>{
   if(!loan) return;
   const amount=Number(document.getElementById('r_amount').value);
   const method=document.getElementById('r_method').value;
-  const date=document.getElementById('r_date').value || new Date().toISOString().slice(0,10);
+  const date=document.getElementById('r_date').value || isoDay(new Date());
   if(!amount || amount<=0){ showToast('Enter amount'); return; }
   loan.repayments.push({id:'r_'+Date.now(), amount, method, date, ts:new Date(date).getTime()||Date.now()});
   recalcLoan(loan);
@@ -841,7 +978,7 @@ document.getElementById('saveRepayBtn').addEventListener('click', ()=>{
 function openDrawer(id){
   const loan=state.loans.find(l=>l.id===id);
   if(!loan) return;
-  const du=daysUntil(loan.dueDate);
+  const du=daysUntil(loan.effectiveDue||loan.dueDate);
   const pct=Math.round((loan.amountPaid/loan.totalRepayable)*100)||0;
   const drawer=document.getElementById('drawer');
   drawer.innerHTML=`
@@ -857,8 +994,11 @@ function openDrawer(id){
           <div><div class="h">Total Borrowed</div><div class="v">${fmt(loan.principal)}</div></div>
           <div><div class="h">Interest (${loan.interestType==='fixed'?loan.interestRate+'%':loan.interestRate+'%/mo × '+loan.duration})</div><div class="v">${fmt(loan.interestAmount)}</div></div>
           <div><div class="h">Borrowed</div><div class="v">${loan.borrowedDate}</div></div>
-          <div><div class="h">Due ${du<0?`• ${Math.abs(du)} days overdue`:du===0?'• today':`in ${du} days`}</div><div class="v">${loan.dueDate}</div></div>
+          ${loan.dueDate
+            ? `<div><div class="h">Due ${du<0?`• ${Math.abs(du)} days overdue`:du===0?'• today':`in ${du} days`}</div><div class="v">${loan.dueDate}</div></div>`
+            : `<div><div class="h">Auto Due ${du<0?`• ${Math.abs(du)}d overdue`:du===0?'• today':`in ${du} days`}</div><div class="v">${loan.effectiveDue} <span class="mono" style="font-size:9px;opacity:.65">AUTO+30D</span></div></div>`}
         </div>
+        ${loan.penaltyAccrued>0?`<div style="margin-top:12px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.16);border-radius:12px;padding:10px 12px;font-size:12px;line-height:1.55">⚠️ <b>Late interest added: ${fmt(loan.penaltyAccrued)}</b><br><span style="opacity:.85">${loan.penaltyCycles} × 30-day top-up${(loan.balance>0&&loan.nextPenalty>0)?` • next +${fmt(loan.nextPenalty)} per 30 unpaid days (recalculated on the deficit)`:''}</span></div>`:''}
       </div>
 
       <div class="card" style="background:var(--paper2);margin-top:12px">
@@ -869,6 +1009,15 @@ function openDrawer(id){
       <div style="display:flex;gap:8px">
         <button class="btn accent" style="flex:1" onclick="openRepayModal('${loan.id}')">+ Add Payment</button>
         ${loan.balance>0?`<button class="btn primary" style="flex:1" onclick="markPaid('${loan.id}')">Mark as Paid</button>`:''}
+      </div>
+
+      <div class="card" style="background:var(--paper2)">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><div class="mono" style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--mut)">Share Loan Status</div><span class="mono" style="font-size:10px;color:var(--mut)">PNG • PDF</span></div>
+        <div style="display:flex;gap:8px">
+          <button class="btn primary" style="flex:1" onclick="shareStatusCard('${loan.id}','png')">PNG Card</button>
+          <button class="btn primary" style="flex:1" onclick="shareStatusCard('${loan.id}','pdf')">PDF Card</button>
+        </div>
+        <div class="mono" style="font-size:10px;color:var(--mut);margin-top:8px">Saves a branded, shareable status card — perfect for WhatsApp.</div>
       </div>
 
       <div>
@@ -894,7 +1043,7 @@ function closeDrawer(){ document.getElementById('drawer').classList.remove('open
 function markPaid(id){
   const loan=state.loans.find(l=>l.id===id);
   if(!loan || loan.balance<=0) return;
-  loan.repayments.push({id:'r_'+Date.now(), amount:loan.balance, method:'Settlement', date:new Date().toISOString().slice(0,10), ts:Date.now()});
+  loan.repayments.push({id:'r_'+Date.now(), amount:loan.balance, method:'Settlement', date:isoDay(new Date()), ts:Date.now()});
   recalcLoan(loan);
   state.activities.unshift({id:'act_'+Date.now(), text:`${loan.clientName} completed loan`, time:Date.now(), type:'paid'});
   saveState(); render(); openDrawer(id); showToast('Marked as Paid 🟢');
@@ -924,19 +1073,21 @@ function genWhatsAppMsg(loan){
   const bal=fmt(loan.balance);
   const total=fmt(loan.totalRepayable);
   const paid=fmt(loan.amountPaid);
-  const due=loan.dueDate;
-  const du=daysUntil(loan.dueDate);
+  const due=loan.effectiveDue||loan.dueDate;
+  const dueLbl=loan.dueDate?'Due Date':'Auto Due Date';
+  const du=daysUntil(loan.effectiveDue||loan.dueDate);
+  const pen=loan.penaltyAccrued||0;
   const app=settings.appName;
   if(loan.status==='paid'){
     return `Hello ${name} 👋\n\nThank you! Your loan of ${total} is now fully PAID.\n\nTotal Paid: ${paid}\nWe appreciate your promptness.\n\n- ${app} | Loan Tracker`;
   }
   if(loan.status==='overdue'){
-    return `Hello ${name} ⚠️\n\nThis is a reminder from ${app}.\nYour loan repayment is OVERDUE.\n\nAmount Due: ${bal}\nOriginal Due Date: ${due} (${Math.abs(du)} days overdue)\nTotal Repayable: ${total}\nPaid so far: ${paid}\n\nPlease arrange payment as soon as possible to avoid additional charges.\n\n- ${app}`;
+    return `Hello ${name} ⚠️\n\nThis is a reminder from ${app}.\nYour loan repayment is OVERDUE.\n\nAmount Due: ${bal}\n${dueLbl}: ${due} (${Math.abs(du)} days overdue)\nTotal Repayable: ${total}\nPaid so far: ${paid}\n${pen>0?`Late interest added: ${fmt(pen)} (${loan.penaltyCycles} × 30-day top-up)\n`:''}\nNote: while any part is left unpaid, one month's interest is added again every 30 days — recalculated on the deficit after part-payments.\n\nPlease arrange payment as soon as possible.\n\n- ${app}`;
   }
   if(loan.status==='due_soon'){
-    return `Hello ${name} 🔔\n\nFriendly reminder: Your loan is DUE SOON.\n\nBalance: ${bal}\nDue Date: ${due} (in ${du} days)\nTotal: ${total} | Paid: ${paid}\n\nKindly prepare your payment of ${bal}. Let us know if you need any assistance.\n\n- ${app}`;
+    return `Hello ${name} 🔔\n\nFriendly reminder: Your loan is DUE SOON.\n\nBalance: ${bal}\n${dueLbl}: ${due} (in ${du} days)\nTotal: ${total} | Paid: ${paid}\n\nKindly prepare your payment of ${bal}. Let us know if you need any assistance.\n\n- ${app}`;
   }
-  return `Hello ${name} 👋\n\nLoan Update from ${app}:\n\nBorrowed: ${fmt(loan.principal)}\nTotal Repayable: ${total}\nPaid: ${paid}\nBalance: ${bal}\nDue Date: ${due}\nProgress: ${Math.round((loan.amountPaid/loan.totalRepayable)*100)}%\n\nThank you for staying on track!\n\n- ${app}`;
+  return `Hello ${name} 👋\n\nLoan Update from ${app}:\n\nBorrowed: ${fmt(loan.principal)}\nTotal Repayable: ${total}\nPaid: ${paid}\nBalance: ${bal}\n${dueLbl}: ${due}${loan.dueDate?'':' (auto)'}\nProgress: ${Math.round((loan.amountPaid/loan.totalRepayable)*100)}%\n\nThank you for staying on track!\n\n- ${app}`;
 }
 function openWhatsApp(loanId){
   const loan=state.loans.find(l=>l.id===loanId);
@@ -947,6 +1098,179 @@ function openWhatsApp(loanId){
   if(link) window.open(link,'_blank');
   else showToast('Invalid phone number');
 }
+
+/* ---------- LOAN STATUS CARD (PNG / PDF share) ---------- */
+function fmtDateNice(s){
+  if(!s) return '—';
+  const d=new Date(String(s).length<=10?s+'T00:00:00':s);
+  if(isNaN(d)) return String(s);
+  return d.toLocaleDateString('en-NG',{day:'numeric',month:'short',year:'numeric'});
+}
+function statusMeta(loan){
+  if(loan.status==='paid') return {label:'PAID', color:'#16A34A'};
+  if(loan.status==='overdue') return {label:'OVERDUE', color:'#EF4444'};
+  if(loan.status==='due_soon') return {label:'DUE SOON', color:'#F59E0B'};
+  return {label:'ACTIVE', color:'#0EA5E9'};
+}
+function crr(ctx,x,y,w,h,r){ ctx.beginPath(); ctx.moveTo(x+r,y); ctx.arcTo(x+w,y,x+w,y+h,r); ctx.arcTo(x+w,y+h,x,y+h,r); ctx.arcTo(x,y+h,x,y,r); ctx.arcTo(x,y,x+w,y,r); ctx.closePath(); }
+function drawLogoMark(ctx,x,y,size){
+  ctx.save(); ctx.translate(x,y); const s=size/100; ctx.scale(s,s);
+  crr(ctx,0,0,100,100,24); ctx.fillStyle='#0F172A'; ctx.fill();
+  const p=new Path2D('M32 65 L32 35 L48 35 Q60 35 60 45 Q60 55 48 55 L36 55 L60 65 L42 65 L32 57 Z');
+  ctx.fillStyle='#FF6B35'; ctx.fill(p);
+  ctx.beginPath(); ctx.arc(72,38,6,0,Math.PI*2); ctx.fillStyle='#FFFBF5'; ctx.fill();
+  ctx.restore();
+}
+function drawStatusCard(loan){
+  const W=1080,H=1350,M=48;
+  const cv=document.createElement('canvas'); cv.width=W; cv.height=H;
+  const ctx=cv.getContext('2d');
+  const st=statusMeta(loan);
+  const NAVY='#1E1B4B', NAVY2='#312E81', CREAM='#FFFBF5', INK='#0F172A', MUT='#64748B', ORANGE='#FF6B35';
+  const DISP='"Bricolage Grotesque","Segoe UI",sans-serif', BODY='"Instrument Sans","Segoe UI",sans-serif', MONO='"JetBrains Mono",monospace';
+  ctx.fillStyle=CREAM; ctx.fillRect(0,0,W,H);
+  /* header panel */
+  const g=ctx.createLinearGradient(0,0,W,640); g.addColorStop(0,NAVY); g.addColorStop(1,NAVY2);
+  crr(ctx,M,M,W-2*M,568,40); ctx.fillStyle=g; ctx.fill();
+  const glow=ctx.createRadialGradient(W-140,110,10,W-140,110,360);
+  glow.addColorStop(0,'rgba(255,107,53,.30)'); glow.addColorStop(1,'rgba(255,107,53,0)');
+  ctx.save(); crr(ctx,M,M,W-2*M,568,40); ctx.clip(); ctx.fillStyle=glow; ctx.fillRect(M,M,W-2*M,568); ctx.restore();
+  /* brand */
+  drawLogoMark(ctx,M+48,M+52,92);
+  ctx.textBaseline='alphabetic';
+  ctx.fillStyle='#FFFFFF'; ctx.font='800 54px '+DISP;
+  ctx.fillText((settings.appName||'Omojosh').toUpperCase(), M+166, M+104);
+  ctx.fillStyle='rgba(255,251,245,.62)'; ctx.font='500 20px '+MONO;
+  ctx.fillText('L O A N   T R A C K E R', M+168, M+138);
+  /* status pill */
+  ctx.font='700 26px '+MONO;
+  const pw=ctx.measureText(st.label).width+56;
+  crr(ctx,W-M-48-pw,M+52,pw,56,28); ctx.fillStyle=st.color; ctx.fill();
+  ctx.fillStyle='#FFFFFF'; ctx.fillText(st.label, W-M-48-pw+28, M+89);
+  /* client */
+  ctx.font='800 60px '+DISP; ctx.fillStyle='#FFFFFF';
+  ctx.fillText(loan.clientName||'Client', M+50, M+246, W-2*M-100);
+  ctx.font='500 21px '+MONO; ctx.fillStyle='rgba(255,251,245,.62)';
+  ctx.fillText(loan.id+'  •  BORROWED '+fmtDateNice(loan.borrowedDate), M+52, M+282);
+  /* balance */
+  ctx.font='500 20px '+MONO; ctx.fillStyle='rgba(255,251,245,.66)';
+  ctx.fillText('OUTSTANDING BALANCE', M+52, M+350);
+  ctx.font='800 92px '+DISP;
+  ctx.fillStyle= loan.status==='overdue' ? '#FFC9B4' : '#FFFFFF';
+  ctx.fillText(fmt(loan.balance), M+50, M+442, W-2*M-100);
+  /* progress */
+  const pct=loan.totalRepayable?Math.min(100,Math.round(loan.amountPaid/loan.totalRepayable*100)):0;
+  crr(ctx,M+50,M+490,W-2*M-100,16,8); ctx.fillStyle='rgba(255,255,255,.18)'; ctx.fill();
+  if(pct>0){ crr(ctx,M+50,M+490,Math.max(16,(W-2*M-100)*pct/100),16,8); ctx.fillStyle= pct>=100?'#22C55E':ORANGE; ctx.fill(); }
+  ctx.font='500 20px '+MONO; ctx.fillStyle='rgba(255,251,245,.78)';
+  ctx.fillText(pct+'% REPAID', M+52, M+540);
+  ctx.textAlign='right';
+  ctx.fillText(fmt(loan.amountPaid)+' of '+fmt(loan.totalRepayable), W-M-50, M+540);
+  ctx.textAlign='left';
+  /* penalty strip */
+  let y=M+568+28;
+  if(loan.penaltyAccrued>0){
+    crr(ctx,M,y,W-2*M,88,20); ctx.fillStyle='#FEF3C7'; ctx.fill();
+    ctx.fillStyle='#78350F'; ctx.font='600 24px '+BODY;
+    ctx.fillText('⚠ Late interest added: '+fmt(loan.penaltyAccrued)+'  ('+loan.penaltyCycles+' × 30-day top-up)', M+30, y+38);
+    ctx.font='400 19px '+BODY; ctx.fillStyle='#92400E';
+    const nxt=(loan.balance>0&&loan.nextPenalty>0)?('  •  next +'+fmt(loan.nextPenalty)+' per 30 days unpaid'):'';
+    ctx.fillText('Recalculated on the deficit after part-payments'+nxt, M+30, y+68);
+    y+=88+22;
+  }
+  /* stats grid */
+  const gw=(W-2*M-24)/2, gh=142, gap=22;
+  const gx=[M, M+gw+24];
+  const du=daysUntil(loan.effectiveDue||loan.dueDate);
+  const paybackTxt = loan.status==='paid' ? 'Settled ✓' : du===null?'—':(du<0? Math.abs(du)+' days overdue' : du===0?'Due today':'In '+du+' days');
+  const tiles=[
+    ['AMOUNT BORROWED', fmt(loan.principal), INK],
+    ['INTEREST CHARGED', fmt(loan.interestAmount), loan.penaltyAccrued>0?'#B45309':INK],
+    ['TOTAL REPAYABLE', fmt(loan.totalRepayable), INK],
+    ['PAID SO FAR', fmt(loan.amountPaid), '#16A34A'],
+    [loan.dueDate?'DUE DATE':'AUTO DUE DATE', fmtDateNice(loan.effectiveDue||loan.dueDate), INK],
+    ['PAYBACK', paybackTxt, loan.status==='overdue'?'#EF4444':INK],
+  ];
+  tiles.forEach((t,i)=>{
+    const x=gx[i%2], ty=y+Math.floor(i/2)*(gh+gap);
+    crr(ctx,x,ty,gw,gh,24); ctx.fillStyle='#FFFFFF'; ctx.fill();
+    ctx.strokeStyle='rgba(15,23,42,.09)'; ctx.lineWidth=2; ctx.stroke();
+    ctx.font='500 19px '+MONO; ctx.fillStyle=MUT;
+    ctx.fillText(t[0], x+28, ty+46);
+    ctx.font='700 36px '+BODY; ctx.fillStyle=t[2];
+    ctx.fillText(t[1], x+28, ty+98, gw-56);
+  });
+  y+=3*gh+2*gap+34;
+  /* footer */
+  ctx.strokeStyle='rgba(15,23,42,.12)'; ctx.lineWidth=2;
+  ctx.beginPath(); ctx.moveTo(M+2,y); ctx.lineTo(W-M-2,y); ctx.stroke();
+  ctx.font='500 20px '+MONO; ctx.fillStyle='#94A3B8'; ctx.textAlign='center';
+  ctx.fillText('Generated '+fmtDateNice(isoDay(new Date()))+'  •  '+(settings.appName||'Omojosh')+' Loan Tracker', W/2, y+46);
+  ctx.textAlign='left';
+  return cv;
+}
+/* Minimal dependency-free PDF writer: wraps the card JPEG in a single-page
+   PDF so it also works fully offline (no CDN needed). */
+async function jpegBlobToPdf(jpegBlob, wpx, hpx){
+  const jpg=new Uint8Array(await jpegBlob.arrayBuffer());
+  const W=595.28, H=Math.round(W*hpx/wpx*100)/100;
+  const enc=new TextEncoder();
+  const parts=[]; let pos=0; const offs=[];
+  const w=(x)=>{ const u=(typeof x==='string')?enc.encode(x):x; parts.push(u); pos+=u.length; };
+  w(new Uint8Array([0x25,0x50,0x44,0x46,0x2D,0x31,0x2E,0x34,0x0A,0x25,0xE2,0xE3,0xCF,0xD3,0x0A])); // %PDF-1.4 + binary comment
+  offs[0]=pos; w('1 0 obj\n<< /Type /Catalog /Pages 2 0 R >>\nendobj\n');
+  offs[1]=pos; w('2 0 obj\n<< /Type /Pages /Kids [3 0 R] /Count 1 >>\nendobj\n');
+  offs[2]=pos; w('3 0 obj\n<< /Type /Page /Parent 2 0 R /MediaBox [0 0 '+W+' '+H+'] /Resources << /XObject << /Im0 4 0 R >> >> /Contents 5 0 R >>\nendobj\n');
+  offs[3]=pos; w('4 0 obj\n<< /Type /XObject /Subtype /Image /Width '+wpx+' /Height '+hpx+' /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length '+jpg.length+' >>\nstream\n');
+  w(jpg);
+  w('\nendstream\nendobj\n');
+  const content='q '+W+' 0 0 '+H+' 0 0 cm /Im0 Do Q';
+  offs[4]=pos; w('5 0 obj\n<< /Length '+content.length+' >>\nstream\n'+content+'\nendstream\nendobj\n');
+  const xref=pos;
+  let x='xref\n0 6\n0000000000 65535 f \n';
+  offs.forEach(o=>{ x+=String(o).padStart(10,'0')+' 00000 n \n'; });
+  w(x);
+  w('trailer\n<< /Size 6 /Root 1 0 R >>\nstartxref\n'+xref+'\n%%EOF');
+  return new Blob(parts,{type:'application/pdf'});
+}
+function downloadBlob(blob,name){
+  const u=URL.createObjectURL(blob);
+  const a=document.createElement('a'); a.href=u; a.download=name;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(()=>URL.revokeObjectURL(u),4000);
+}
+async function shareStatusCard(id, kind){
+  const loan=state.loans.find(l=>l.id===id);
+  if(!loan) return;
+  recalcLoan(loan);
+  showToast('Building status card...');
+  try{
+    try{ await document.fonts.ready; }catch(e){}
+    const cv=drawStatusCard(loan);
+    const fname='omojosh-'+(loan.clientName||'client').trim().replace(/[^a-z0-9]+/gi,'-').replace(/^-+|-+$/g,'').toLowerCase()+'-status';
+    const shareIt=async(blob,name,type)=>{
+      try{
+        const file=new File([blob],name,{type});
+        if(navigator.canShare && navigator.canShare({files:[file]})){
+          await navigator.share({files:[file], title:'Loan status — '+loan.clientName, text:loan.clientName+' — loan status from '+(settings.appName||'Omojosh')});
+          return true;
+        }
+      }catch(e){ if(e && (e.name==='AbortError'||e.name==='NotAllowedError')) return true; }
+      return false;
+    };
+    if(kind==='pdf'){
+      const jpgBlob=await new Promise(res=>cv.toBlob(res,'image/jpeg',0.92));
+      const pdf=await jpegBlobToPdf(jpgBlob, cv.width, cv.height);
+      const name=fname+'.pdf';
+      if(!await shareIt(pdf,name,'application/pdf')){ downloadBlob(pdf,name); showToast('PDF card saved'); }
+    } else {
+      const blob=await new Promise(res=>cv.toBlob(res,'image/png'));
+      const name=fname+'.png';
+      if(!await shareIt(blob,name,'image/png')){ downloadBlob(blob,name); showToast('PNG card saved'); }
+    }
+  }catch(err){ console.error('[ShareCard]', err); showToast('Could not build the card','warn'); }
+}
+window.OmojoshShare={ shareStatusCard, drawStatusCard, jpegBlobToPdf };
 
 function sparkPath(vals,w=86,h=28){
   if(!vals||!vals.length) return '';
@@ -1117,7 +1441,10 @@ function timeAgo(ts){
 
 function loanCard(loan){
   const pct=Math.round((loan.amountPaid/loan.totalRepayable)*100)||0;
-  const du=daysUntil(loan.dueDate);
+  const dueRef=loan.effectiveDue||loan.dueDate;
+  const du=daysUntil(dueRef);
+  const auto=!loan.dueDate;
+  const dueFoot= du===null?'No due date':(du<0?`${Math.abs(du)}d overdue`:du===0?'Due today':`Due in ${du}d`)+(auto?' • auto':'');
   const barClass = loan.status==='paid'?'ok':loan.status==='overdue'?'over':loan.status==='due_soon'?'warn':'';
   return `
     <div class="loanCard" onclick="openDrawer('${loan.id}')">
@@ -1138,10 +1465,10 @@ function loanCard(loan){
       <div class="progress"><i class="${barClass}" style="width:${pct}%"></i></div>
       <div class="loanStats">
         <div class="statBox"><div class="l">Borrowed</div><div class="v">${fmt(loan.principal)}</div></div>
-        <div class="statBox"><div class="l">Due Date</div><div class="v">${loan.dueDate}</div></div>
+        <div class="statBox"><div class="l">Due Date</div><div class="v">${loan.dueDate||(loan.effectiveDue?loan.effectiveDue+' (auto)':'—')}</div></div>
       </div>
       <div class="loanFoot">
-        <span class="mono" style="font-size:11px;color:${du<0?'var(--over)':du<=settings.graceDays?'var(--warn)':'var(--mut)'}">${du<0?`${Math.abs(du)}d overdue`:du===0?'Due today':`Due in ${du}d`}</span>
+        <span class="mono" style="font-size:11px;color:${du===null?'var(--mut2)':(du<0?'var(--over)':du<=settings.graceDays?'var(--warn)':'var(--mut)')}">${dueFoot}</span>
         <button class="btn sm accent" onclick="event.stopPropagation();openRepayModal('${loan.id}')">+ Pay</button>
       </div>
     </div>
@@ -1183,6 +1510,8 @@ function renderLoanView(){
 function renderAdmin(){
   return `
     <div style="max-width:680px;margin:0 auto;display:flex;flex-direction:column;gap:16px">
+      ${(typeof renderAccountCard==='function')?renderAccountCard():''}
+      ${(typeof renderClientPortalCard==='function')?renderClientPortalCard():''}
       <div class="card">
         <h3 class="disp" style="font-weight:800;font-size:20px;margin-bottom:14px">Application Settings</h3>
         <div style="display:flex;flex-direction:column;gap:14px">
@@ -1272,12 +1601,632 @@ function render(){
 
 // APP INITIALIZATION
 window.addEventListener('DOMContentLoaded', ()=>{
+  state.loans.forEach(recalcLoan);
+  if(state.loans.length) saveState();
   render();
   setTimeout(()=>{
     const loader = document.getElementById('app-loader');
     if(loader) loader.classList.add('fade-out');
   }, 400);
 });
+</script>
+
+<script>
+/* =====================================================================
+   OMOJOSH CLOUD LAYER - Firebase Google sign-in + Firestore sync
+   ---------------------------------------------------------------------
+   YOUR FIREBASE CONFIG IS NO LONGER STORED IN THIS FILE, so updating
+   index.html can never wipe the sign-in setup again. It is resolved in
+   this order:
+     1. Saved in the browser  -> ADMIN tab > Cloud Sync Setup > paste box
+        (localStorage key: omojosh_fb_config). Easiest - no code editing.
+     2. firebase-config.js    -> a small file sitting next to index.html
+        that sets window.OMOJOSH_FIREBASE_CONFIG. Best for hosting.
+     3. FIREBASE_CONFIG below -> in-file fallback (placeholders = off).
+   ONE-TIME SETUP (about 5 minutes):
+   1. Create a project at https://console.firebase.google.com (name: omojosh)
+   2. Build > Authentication > Sign-in method > enable "Google"
+   3. Authentication > Settings > Authorised domains > add omojosh.ttosr.com
+   4. Build > Firestore Database > Create database (production mode)
+   5. Project settings > General > Your apps > register a Web app
+   6. Copy the firebaseConfig values and paste them into the box in
+      ADMIN > Cloud Sync Setup (or into firebase-config.js).
+   7. Publish the security rules from ADMIN > Cloud Sync Setup in the app.
+   The full guide (with copy buttons) lives in the app: ADMIN tab.
+   Until configured, the app keeps running 100% offline in LOCAL mode and
+   nothing in localStorage is touched. On first sign-in the existing
+   local data is automatically uploaded to the cloud (never wiped).
+   ===================================================================== */
+
+/* Fallback only - prefer the paste box in ADMIN or firebase-config.js */
+const FIREBASE_CONFIG = {
+  apiKey:            "PASTE_YOUR_API_KEY",
+  authDomain:        "omojosh.firebaseapp.com",
+  projectId:         "omojosh",
+  storageBucket:     "omojosh.appspot.com",
+  messagingSenderId: "PASTE_YOUR_SENDER_ID",
+  appId:             "PASTE_YOUR_APP_ID"
+};
+
+/* ---------- CONFIG RESOLVER: saved-in-browser > firebase-config.js > in-file ---------- */
+const FB_CFG_LS_KEY = 'omojosh_fb_config';
+function isValidFbConfig(c){
+  return !!(c && typeof c==='object' && typeof c.apiKey==='string' && c.apiKey.indexOf('PASTE')!==0 && c.apiKey.length>20
+    && typeof c.projectId==='string' && c.projectId.length>0 && c.projectId.indexOf('YOUR_PROJECT')!==0);
+}
+function getFirebaseConfig(){
+  try{
+    const saved=JSON.parse(localStorage.getItem(FB_CFG_LS_KEY)||'null');
+    if(isValidFbConfig(saved)) return saved;
+  }catch(e){}
+  if(isValidFbConfig(window.OMOJOSH_FIREBASE_CONFIG)) return window.OMOJOSH_FIREBASE_CONFIG;
+  return FIREBASE_CONFIG;
+}
+function fbConfigSource(){
+  try{ if(isValidFbConfig(JSON.parse(localStorage.getItem(FB_CFG_LS_KEY)||'null'))) return 'browser'; }catch(e){}
+  if(isValidFbConfig(window.OMOJOSH_FIREBASE_CONFIG)) return 'file';
+  return 'none';
+}
+function fbConfigured(){
+  return isValidFbConfig(getFirebaseConfig());
+}
+/* Only these accounts may open the dashboard. Add more later if needed. */
+const AUTHORIZED_EMAILS = ['joshforrill@gmail.com'];
+const FIREBASE_SDK = 'https://www.gstatic.com/firebasejs/10.14.1/';
+const GATE_PREVIEW = /[?&]gate=preview/.test(location.search);
+
+/* fbConfigured() now lives with the resolver above */
+function escHtml(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function emailAllowed(email){
+  const e=(email||'').toLowerCase();
+  return AUTHORIZED_EMAILS.some(a=>a.toLowerCase()===e);
+}
+
+/* ---------- SYNC STATUS PILL (topbar) ---------- */
+function updateSyncPill(state){
+  const t=document.getElementById('syncTxt'), d=document.getElementById('dot');
+  if(!t||!d) return;
+  const map={ LOCAL:['LOCAL',''], SYNCED:['SYNCED','ok'], SYNCING:['SYNCING','warn'], OFFLINE:['OFFLINE','off'] };
+  const [label,cls]=map[state]||map.LOCAL;
+  t.textContent=' '+label;
+  d.className='dot'+(cls?' '+cls:'');
+}
+
+/* ---------- SAVE HOOKS: every local change feeds the sync engine ---------- */
+let settingsDirty=false;
+const _origSaveState = saveState;
+saveState = function(){
+  _origSaveState();
+  if(window.Sync && Sync.active) Sync.onLocalChange();
+};
+const _origSaveSettings = saveSettings;
+saveSettings = function(){
+  _origSaveSettings();
+  if(window.Sync && Sync._applyingRemote) return;
+  settingsDirty=true;
+  if(window.Sync && Sync.active) Sync.scheduleFlush();
+};
+
+/* ---------- FIRESTORE HELPERS ---------- */
+function normalizeLoan(doc){
+  const l=JSON.parse(JSON.stringify(doc));
+  l.principal=Number(l.principal)||0;
+  l.interestRate=Number(l.interestRate)||0;
+  l.duration=Number(l.duration)||1;
+  l.repayments=Array.isArray(l.repayments)?l.repayments:[];
+  if(!l.phoneDigits && l.phone) l.phoneDigits=String(l.phone).replace(/[^0-9]/g,'');
+  l.updatedAt=l.updatedAt||l.createdAt||Date.now();
+  recalcLoan(l);
+  return l;
+}
+function sanitizeLoan(l){
+  const c=JSON.parse(JSON.stringify(l)); // strips undefined fields Firestore rejects
+  if(!c.phoneDigits && c.phone) c.phoneDigits=String(c.phone).replace(/[^0-9]/g,'');
+  return c;
+}
+
+/* ---------- SYNC ENGINE ---------- */
+const Sync = {
+  active:false, user:null, uid:null, col:null, userDoc:null, _unsub:null,
+  _prev:{}, _cloudJson:{}, _known:new Set(), _remoteDeleted:new Set(), _tombstones:{},
+  _flushTimer:null, _pushing:false, _applyingRemote:false, _lastMetaJson:'', lastPushAt:null,
+
+  async start(user){
+    if(this.active && this.uid===user.uid) return;
+    if(this._unsub){ try{this._unsub();}catch(e){} this._unsub=null; }
+    this.user=user; this.uid=user.uid; this.active=true;
+    this._prev={}; this._cloudJson={}; this._known=new Set(); this._remoteDeleted=new Set(); this._tombstones={};
+    const db=firebase.firestore();
+    this.col=db.collection('users').doc(user.uid).collection('loans');
+    this.userDoc=db.collection('users').doc(user.uid);
+    state.loans.forEach(l=>{ this._prev[l.id]=JSON.stringify(l); });
+    updateSyncPill('SYNCING');
+    try{
+      const snap=await this.col.get();
+      const cloud={};
+      snap.forEach(d=>{ cloud[d.id]=d.data(); this._known.add(d.id); });
+      const metaDoc=await this.userDoc.get();
+      await this.merge(cloud, metaDoc.data()||{});
+    }catch(err){
+      console.error('[Sync] initial merge failed', err);
+      updateSyncPill('OFFLINE');
+      showToast('Cloud sync unavailable - working locally');
+    }
+    if(!this.active) return; // signed out while loading
+    this._unsub=this.col.onSnapshot(s=>this.onRemote(s), err=>{
+      console.error('[Sync] snapshot error', err);
+      updateSyncPill('OFFLINE');
+    });
+    this.scheduleFlush(800);
+  },
+
+  stop(){
+    this.active=false; this.user=null; this.uid=null;
+    if(this._unsub){ try{this._unsub();}catch(e){} this._unsub=null; }
+    if(this._flushTimer){ clearTimeout(this._flushTimer); this._flushTimer=null; }
+    this._pushing=false;
+    updateSyncPill(fbConfigured()?'OFFLINE':'LOCAL');
+  },
+
+  async merge(cloud, meta){
+    this._applyingRemote=true;
+    let changed=false;
+    const localHasData=state.loans.length>0 || state.activities.length>0;
+    const cloudHasData=Object.keys(cloud).length>0 || !!(meta && (meta.migratedAt || meta.settings || meta.activities));
+
+    if(localHasData && !cloudHasData){
+      /* FIRST-RUN MIGRATION: upload existing localStorage data, never wipe it */
+      try{
+        state.loans.forEach(l=>{
+          if(!l.updatedAt) l.updatedAt=l.createdAt||Date.now();
+          if(!l.phoneDigits && l.phone) l.phoneDigits=String(l.phone).replace(/[^0-9]/g,'');
+        });
+        _origSaveState(); // persist the stamps immediately so local and cloud stay identical
+        meta={ settings:Object.assign({},settings), activities:state.activities.slice(0,30),
+               migratedAt:Date.now(), updatedAt:Date.now(),
+               profile:{ email:this.user.email||'', name:this.user.displayName||'' } };
+        this._lastMetaJson=JSON.stringify(meta);
+        await this.userDoc.set(meta,{merge:true});
+        for(const l of state.loans){
+          try{ await this.col.doc(l.id).set(sanitizeLoan(l)); this._known.add(l.id); this._cloudJson[l.id]=JSON.stringify(l); this._prev[l.id]=JSON.stringify(l); }
+          catch(e){ console.error('[Sync] migration push failed', l.id, e); }
+        }
+        showToast(state.loans.length ? ('Backed up '+state.loans.length+' loans + settings to cloud') : 'Cloud ready');
+      }catch(err){
+        console.error('[Sync] migration failed', err);
+        showToast('Cloud backup failed - will retry automatically');
+      }
+    } else {
+      /* MERGE: cloud -> local, newer updatedAt wins per loan */
+      Object.entries(cloud).forEach(([id,doc])=>{
+        if(doc && doc.deleted){
+          this._remoteDeleted.add(id);
+          this._cloudJson[id]=JSON.stringify({deleted:true,updatedAt:doc.updatedAt||0});
+          const i=state.loans.findIndex(l=>l.id===id);
+          if(i>=0){ state.loans.splice(i,1); delete this._prev[id]; changed=true; }
+          return;
+        }
+        const local=state.loans.find(l=>l.id===id);
+        if(!local){
+          const nl=normalizeLoan(doc);
+          state.loans.unshift(nl);
+          this._prev[id]=JSON.stringify(nl); this._cloudJson[id]=JSON.stringify(doc);
+          changed=true;
+        } else if((doc.updatedAt||0) > (local.updatedAt||0)){
+          const nl=normalizeLoan(doc);
+          const i=state.loans.indexOf(local);
+          state.loans[i]=nl;
+          this._prev[id]=JSON.stringify(nl); this._cloudJson[id]=JSON.stringify(doc);
+          changed=true;
+        } else if(JSON.stringify(local)===JSON.stringify(doc)){
+          this._cloudJson[id]=JSON.stringify(doc);
+        }
+      });
+      if(meta && meta.settings && !settingsDirty){
+        const cloudSettings=Object.assign(defaultSettings(), meta.settings);
+        if(JSON.stringify(cloudSettings)!==JSON.stringify(settings)){ settings=cloudSettings; saveSettings(); changed=true; }
+      }
+      if(meta && Array.isArray(meta.activities) && meta.activities.length){
+        const seen=new Set(state.activities.map(a=>a.id));
+        meta.activities.forEach(a=>{ if(a && a.id && !seen.has(a.id)){ state.activities.push(a); seen.add(a.id); changed=true; } });
+        state.activities.sort((a,b)=>(b.time||0)-(a.time||0));
+        if(state.activities.length>30) state.activities.length=30;
+      }
+      if(changed){ _origSaveState(); }
+    }
+    this._applyingRemote=false;
+    settingsDirty=false;
+    this._lastMetaJson=''; // recompute on next flush
+    if(changed){ applyTheme(); render(); }
+  },
+
+  onRemote(snap){
+    if(!this.active) return;
+    let changed=false;
+    snap.docChanges().forEach(ch=>{
+      if(ch.type==='removed') return;
+      const id=ch.doc.id, doc=ch.doc.data();
+      if(doc && doc.deleted){
+        this._remoteDeleted.add(id);
+        this._cloudJson[id]=JSON.stringify({deleted:true,updatedAt:doc.updatedAt||0});
+        const i=state.loans.findIndex(l=>l.id===id);
+        if(i>=0){ state.loans.splice(i,1); delete this._prev[id]; changed=true; }
+        return;
+      }
+      const local=state.loans.find(l=>l.id===id);
+      if(!local){
+        const nl=normalizeLoan(doc);
+        state.loans.unshift(nl);
+        this._prev[id]=JSON.stringify(nl); this._cloudJson[id]=JSON.stringify(doc);
+        changed=true;
+      } else if((doc.updatedAt||0) > (local.updatedAt||0)){
+        const nl=normalizeLoan(doc);
+        const i=state.loans.indexOf(local);
+        state.loans[i]=nl;
+        this._prev[id]=JSON.stringify(nl); this._cloudJson[id]=JSON.stringify(doc);
+        changed=true;
+      } else if(!this._cloudJson[id]){
+        this._cloudJson[id]=JSON.stringify(doc);
+      }
+    });
+    if(changed){ _origSaveState(); render(); }
+    this.updatePill();
+  },
+
+  onLocalChange(){
+    if(!this.active) return;
+    const now=Date.now();
+    const curr=new Map(state.loans.map(l=>[l.id, JSON.stringify(l)]));
+    Object.keys(this._prev).forEach(id=>{
+      if(!curr.has(id)){
+        if(this._known.has(id) && !this._remoteDeleted.has(id) && !this._tombstones[id]) this._tombstones[id]=now;
+        delete this._prev[id];
+      }
+    });
+    let stamped=false;
+    state.loans.forEach(l=>{
+      const j=curr.get(l.id);
+      if(this._prev[l.id]!==undefined && this._prev[l.id]!==j){ l.updatedAt=now; curr.set(l.id, JSON.stringify(l)); stamped=true; }
+      else if(l.updatedAt===undefined){ l.updatedAt=l.createdAt||now; }
+    });
+    this._prev={};
+    curr.forEach((v,k)=>{ this._prev[k]=v; });
+    if(stamped) _origSaveState();
+    this.scheduleFlush();
+  },
+
+  scheduleFlush(delay){
+    if(!this.active) return;
+    if(this._flushTimer) clearTimeout(this._flushTimer);
+    this._flushTimer=setTimeout(()=>{ this._flushTimer=null; this.flush(); }, (delay==null?1200:delay));
+    this.updatePill();
+  },
+
+  updatePill(){
+    if(!this.active) return;
+    if(!navigator.onLine){ updateSyncPill('OFFLINE'); return; }
+    updateSyncPill(this._flushTimer||this._pushing ? 'SYNCING' : 'SYNCED');
+  },
+
+  forceSync(){
+    if(!this.active){ showToast('Sign in to sync'); return; }
+    if(this._flushTimer){ clearTimeout(this._flushTimer); this._flushTimer=null; }
+    showToast('Syncing...');
+    this.flush();
+  },
+
+  async flush(){
+    if(!this.active || !this.user || !firebase || !firebase.firestore) return;
+    const now=Date.now();
+    const jobs=[];
+    state.loans.forEach(l=>{
+      if(!l.updatedAt) l.updatedAt=l.createdAt||now;
+      const cur=JSON.stringify(l);
+      if(this._cloudJson[l.id]!==cur){
+        const payload=sanitizeLoan(l);
+        jobs.push(this.col.doc(l.id).set(payload).then(()=>{
+          this._cloudJson[l.id]=cur; this._prev[l.id]=cur; this._known.add(l.id);
+        }).catch(err=>console.error('[Sync] push failed', l.id, err)));
+      }
+    });
+    Object.keys(this._tombstones).forEach(id=>{
+      if(this._remoteDeleted.has(id)){ delete this._tombstones[id]; return; }
+      const payload={deleted:true, updatedAt:this._tombstones[id]};
+      jobs.push(this.col.doc(id).set(payload).then(()=>{
+        this._cloudJson[id]=JSON.stringify(payload); delete this._tombstones[id];
+      }).catch(err=>console.error('[Sync] tombstone failed', id, err)));
+    });
+    const meta={ settings:Object.assign({},settings), activities:state.activities.slice(0,30),
+                 updatedAt:now, profile:{ email:this.user.email||'', name:this.user.displayName||'' } };
+    const mj=JSON.stringify(meta);
+    if(mj!==this._lastMetaJson){
+      jobs.push(this.userDoc.set(meta,{merge:true}).then(()=>{ this._lastMetaJson=mj; }).catch(err=>console.error('[Sync] meta push failed', err)));
+    }
+    if(jobs.length){
+      this._pushing=true; this.updatePill();
+      try{ await Promise.all(jobs); }catch(e){}
+      this._pushing=false;
+      this.lastPushAt=Date.now();
+    }
+    this.updatePill();
+    if(activeTab==='ADMIN') render();
+  },
+
+  wipe(){
+    const now=Date.now();
+    this._known.forEach(id=>{ if(!this._remoteDeleted.has(id) && !this._tombstones[id]) this._tombstones[id]=now; });
+    if(this._flushTimer){ clearTimeout(this._flushTimer); this._flushTimer=null; }
+    this.flush();
+  }
+};
+window.Sync=Sync;
+
+/* ---------- AUTH GATE ---------- */
+const gateEl=document.getElementById('authGate');
+const gateStatus=document.getElementById('gateStatus');
+const gateMsg=document.getElementById('gateMsg');
+const gateBtn=document.getElementById('googleSignInBtn');
+let gateDenied=null, gateReady=false;
+
+function showGate(mode, detail){
+  gateEl.style.display='flex';
+  requestAnimationFrame(()=>gateEl.classList.add('show'));
+  gateMsg.textContent=''; gateMsg.className='gate-msg';
+  if(mode==='loading'){ gateStatus.textContent='Connecting secure sign-in...'; gateBtn.disabled=true; }
+  else if(mode==='ready'){ gateStatus.textContent='Sign in to sync your loans across devices'; gateBtn.disabled=false; }
+  else if(mode==='denied'){
+    gateStatus.textContent='Signed in, but this account is not allowed';
+    gateMsg.innerHTML='Access restricted. This dashboard is authorised for <b>'+escHtml(AUTHORIZED_EMAILS.join(', '))+'</b> only.<br>You signed in as <b>'+escHtml(detail||'')+'</b>.';
+    gateMsg.classList.add('err'); gateBtn.disabled=false;
+  }
+  else if(mode==='error'){
+    gateStatus.textContent='Sign in to sync your loans across devices';
+    gateMsg.textContent=detail||'Something went wrong. Please try again.';
+    gateMsg.classList.add('err'); gateBtn.disabled=false;
+  }
+}
+function hideGate(){
+  gateEl.classList.remove('show');
+  setTimeout(()=>{ gateEl.style.display='none'; }, 380);
+}
+function friendlyAuthError(err){
+  const code=(err&&err.code)||'';
+  if(code==='auth/unauthorized-domain') return 'This domain is not authorised yet. In the Firebase console: Authentication > Settings > Authorised domains > add omojosh.ttosr.com, then try again.';
+  if(code==='auth/popup-blocked') return 'Popup blocked. Allow popups for this site and try again.';
+  if(code==='auth/network-request-failed') return 'Network problem. Check your connection and try again.';
+  return (err&&err.message)||'Sign-in failed. Please try again.';
+}
+function enterApp(){ hideGate(); }
+function onAuthStateChanged2(user){
+  if(user){
+    const email=(user.email||'').toLowerCase();
+    if(emailAllowed(email)){
+      gateDenied=null;
+      enterApp();
+      Sync.start(user);
+    } else {
+      gateDenied=email;
+      try{ firebase.auth().signOut().catch(function(){}); }catch(e){}
+      showGate('denied', email);
+    }
+  } else {
+    Sync.stop();
+    showGate(gateDenied?'denied':'ready', gateDenied);
+  }
+}
+function loadScript(src){
+  return new Promise(function(res,rej){
+    const s=document.createElement('script');
+    s.src=src; s.async=true;
+    s.onload=function(){res();};
+    s.onerror=function(){rej(new Error('Failed to load '+src));};
+    document.head.appendChild(s);
+  });
+}
+async function loadFirebase(){
+  if(window.firebase && firebase.apps && firebase.apps.length) return;
+  await loadScript(FIREBASE_SDK+'firebase-app-compat.js');
+  await loadScript(FIREBASE_SDK+'firebase-auth-compat.js');
+  await loadScript(FIREBASE_SDK+'firebase-firestore-compat.js');
+  firebase.initializeApp(getFirebaseConfig());
+  try{ await firebase.firestore().enablePersistence({ synchronizeTabs:true }); }
+  catch(e){ console.warn('[Firebase] offline persistence unavailable', e); }
+  gateReady=true;
+  firebase.auth().onAuthStateChanged(onAuthStateChanged2);
+  try{ await firebase.auth().getRedirectResult(); }
+  catch(err){ showGate('error', friendlyAuthError(err)); }
+}
+gateBtn.addEventListener('click', async ()=>{
+  if(GATE_PREVIEW){
+    gateStatus.textContent='Sign in to sync your loans across devices';
+    gateMsg.innerHTML='Preview mode - paste your <b>firebaseConfig</b> in ADMIN &rarr; Cloud Sync Setup (or add firebase-config.js) to enable real sign-in.';
+    gateMsg.classList.add('err');
+    return;
+  }
+  if(!gateReady) return;
+  gateMsg.textContent=''; gateMsg.className='gate-msg';
+  gateBtn.disabled=true;
+  gateStatus.textContent='Opening Google sign-in...';
+  const provider=new firebase.auth.GoogleAuthProvider();
+  provider.setCustomParameters({ prompt:'select_account' });
+  try{
+    await firebase.auth().signInWithPopup(provider);
+  }catch(err){
+    const code=(err&&err.code)||'';
+    if(code==='auth/popup-blocked' || code==='auth/operation-not-supported-in-this-environment'){
+      try{ await firebase.auth().signInWithRedirect(provider); return; }
+      catch(e2){ showGate('error', friendlyAuthError(e2)); }
+    }
+    else if(code==='auth/popup-closed-by-user' || code==='auth/cancelled-popup-request'){ showGate('ready'); }
+    else { showGate('error', friendlyAuthError(err)); }
+  }
+});
+function doSignOut(){
+  if(!(window.firebase && firebase.auth())){ showToast('Not signed in'); return; }
+  firebase.auth().signOut().then(()=>{ showToast('Signed out'); }).catch(()=>{ showToast('Sign out failed'); });
+}
+
+/* ---------- ONLINE / OFFLINE ---------- */
+window.addEventListener('online', ()=>{
+  if(Sync.active){ updateSyncPill('SYNCING'); Sync.scheduleFlush(500); }
+  else updateSyncPill(fbConfigured()?'OFFLINE':'LOCAL');
+});
+window.addEventListener('offline', ()=>updateSyncPill('OFFLINE'));
+
+/* ---------- ADMIN TAB CARDS ---------- */
+window.__OMOJOSH_HELP={
+  cfgTemplate:
+'// firebase-config.js - sits next to index.html on your hosting.\n'+
+'window.OMOJOSH_FIREBASE_CONFIG = {\n'+
+'  apiKey:            "AIza...paste from Firebase console",\n'+
+'  authDomain:        "YOUR_PROJECT.firebaseapp.com",\n'+
+'  projectId:         "YOUR_PROJECT",\n'+
+'  storageBucket:     "YOUR_PROJECT.appspot.com",\n'+
+'  messagingSenderId: "1234567890",\n'+
+'  appId:             "1:1234567890:web:abc123def456"\n'+
+'};',
+  rules:
+"rules_version = '2';\n"+
+'service cloud.firestore {\n'+
+'  match /databases/{database}/documents {\n'+
+'    // Account doc: /users/{uid} (settings, activities, profile)\n'+
+'    match /users/{uid} {\n'+
+'      allow read, write: if request.auth != null && request.auth.uid == uid;\n'+
+'    }\n'+
+'    // Loan docs: /users/{uid}/loans/{loanId}\n'+
+'    match /users/{uid}/{document=**} {\n'+
+'      allow read, write: if request.auth != null && request.auth.uid == uid;\n'+
+'    }\n'+
+'    // FUTURE - client loan-status portal (enable when the feature ships):\n'+
+'    // match /clientStatus/{phone} {\n'+
+'    //   allow read: if request.auth != null;\n'+
+'    // }\n'+
+'  }\n'+
+'}'
+};
+function copyText(txt, label){
+  const done=()=>showToast((label||'Text')+' copied');
+  function fallback(){
+    const ta=document.createElement('textarea');
+    ta.value=txt; ta.style.position='fixed'; ta.style.opacity='0';
+    document.body.appendChild(ta); ta.focus(); ta.select();
+    try{ document.execCommand('copy'); done(); }catch(e){ showToast('Copy failed - select the text manually'); }
+    ta.remove();
+  }
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(txt).then(done).catch(fallback);
+  } else fallback();
+}
+/* ---------- FIREBASE CONFIG PASTE BOX (saved in the browser, survives app updates) ---------- */
+function parsePastedConfig(raw){
+  let s=String(raw||'').trim();
+  if(!s) return null;
+  s=s.replace(/^\s*(?:window\.)?OMOJOSH_FIREBASE_CONFIG\s*=\s*/,'').replace(/;\s*$/,'').trim();
+  const m=s.match(/\{[\s\S]*\}/);
+  if(m) s=m[0];
+  try{ return JSON.parse(s); }catch(e){}
+  try{ return JSON.parse(s.replace(/([{,]\s*)([A-Za-z_][A-Za-z0-9_]*)\s*:/g,'$1"$2":').replace(/'/g,'"').replace(/,\s*([}\]])/g,'$1')); }catch(e){}
+  return null;
+}
+function saveFbConfigFromBox(){
+  const box=document.getElementById('fbCfgBox');
+  if(!box) return;
+  const cfg=parsePastedConfig(box.value);
+  if(!isValidFbConfig(cfg)){
+    showToast('That does not look like a firebaseConfig - check apiKey & projectId','warn');
+    return;
+  }
+  localStorage.setItem(FB_CFG_LS_KEY, JSON.stringify(cfg));
+  showToast('Firebase connected - reloading...');
+  setTimeout(()=>location.reload(), 700);
+}
+function removeFbConfig(){
+  if(!confirm('Remove the saved Firebase connection from this device? The app returns to LOCAL mode (your loans are not touched).')) return;
+  localStorage.removeItem(FB_CFG_LS_KEY);
+  showToast('Firebase disconnected');
+  setTimeout(()=>location.reload(), 600);
+}
+window.OmojoshCloud={ saveFbConfigFromBox, removeFbConfig, parsePastedConfig };
+
+function renderAccountCard(){
+  if(window.Sync && Sync.active && Sync.user){
+    const u=Sync.user;
+    const nm=u.displayName||'Omojosh Admin';
+    const em=u.email||'';
+    return `
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+        <h3 class="disp" style="font-weight:800;font-size:20px">Account &amp; Sync</h3>
+        <span class="badge active">CLOUD</span>
+      </div>
+      <div style="display:flex;gap:12px;align-items:center;padding:14px;border:1px solid var(--line);border-radius:16px;background:var(--paper2)">
+        <div class="avatar">${escHtml(initials(nm||em||'OJ'))}</div>
+        <div style="min-width:0;flex:1">
+          <b style="display:block;overflow-wrap:anywhere">${escHtml(nm)}</b>
+          <span class="mono" style="font-size:11px;color:var(--mut);overflow-wrap:anywhere">${escHtml(em)}</span>
+        </div>
+        <span class="badge paid">GOOGLE</span>
+      </div>
+      <div class="mono" style="font-size:11px;color:var(--mut);margin-top:12px">${state.loans.length} loans secured in cloud &middot; last push ${Sync.lastPushAt?timeAgo(Sync.lastPushAt):'pending'}</div>
+      <div style="display:flex;gap:10px;margin-top:14px;flex-wrap:wrap">
+        <button class="btn primary" onclick="Sync.forceSync()">Sync now</button>
+        <button class="btn" style="color:var(--over)" onclick="doSignOut()">Sign out</button>
+      </div>
+    </div>`;
+  }
+  if(!fbConfigured());
+  return '';
+}
+
+function renderClientPortalCard(){
+  return `
+  <div class="card" style="border-style:dashed">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;gap:10px">
+      <h3 class="disp" style="font-weight:800;font-size:20px">Client Portal</h3>
+      <span class="badge due">COMING SOON</span>
+    </div>
+    <p style="font-size:13px;color:var(--mut);line-height:1.55">Later, clients will be able to check their own loan status with their phone number. The database is already prepared for it: every loan stores a normalised phone (<span class="mono">phoneDigits</span>) and cloud records are grouped per account, so a read-only client lookup can be switched on later without any migration.</p>
+  </div>`;
+}
+
+/* ---------- RESET ALL DATA (cloud-aware) ---------- */
+function clearAllData(){
+  const msg=(window.Sync && Sync.active)
+    ? 'Delete ALL loans on this device AND in your cloud account? This cannot be undone.'
+    : 'Are you sure you want to clear all loans and activities? This action cannot be undone.';
+  if(!confirm(msg)) return;
+  localStorage.removeItem(LS_KEY);
+  state=loadState();
+  if(window.Sync && Sync.active) Sync.wipe();
+  render();
+  showToast('Database reset');
+}
+
+/* ---------- BOOT ---------- */
+async function bootCloud(){
+  if(GATE_PREVIEW){ showGate('ready'); return; }
+  /* Optional: firebase-config.js sits next to index.html and sets
+     window.OMOJOSH_FIREBASE_CONFIG. Missing file = silently skipped. */
+  if(!fbConfigured()){
+    try{ await loadScript('./firebase-config.js'); }catch(e){ /* no config file - fine */ }
+  }
+  if(!fbConfigured()){
+    console.info('[Omojosh] Cloud sync not configured - running in LOCAL mode. Open the ADMIN tab for the setup guide.');
+    updateSyncPill('LOCAL');
+    return;
+  }
+  showGate('loading');
+  loadFirebase().catch(err=>{
+    console.error('[Firebase] init failed', err);
+    gateStatus.textContent='Could not reach the sign-in service';
+    gateBtn.style.display='none';
+    gateMsg.innerHTML='You can keep using the app offline on this device. <a href="#" id="offlineBypass">Continue without sign-in</a>';
+    gateMsg.classList.add('err');
+    const l=document.getElementById('offlineBypass');
+    if(l) l.addEventListener('click', (e)=>{ e.preventDefault(); hideGate(); showToast('Offline mode - cloud sync unavailable'); });
+  });
+}
+bootCloud();
 </script>
 
 <script>

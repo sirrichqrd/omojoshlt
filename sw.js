@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'omojosh-v1';
+const CACHE_VERSION = 'omojosh-v2';
 const PRECACHE = [
   './',
   './index.html',
