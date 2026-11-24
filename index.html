@@ -1679,7 +1679,7 @@ const GATE_PREVIEW = /[?&]gate=preview/.test(location.search);
 function escHtml(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 function emailAllowed(email){
   const norm = (s) => (s||'').trim().toLowerCase().replace('@googlemail.com','@gmail.com');
-  const e=(email||'').toLowerCase();
+  const e = norm(email); // ✅ normalized
   return AUTHORIZED_EMAILS.some(a => norm(a) === e);
 }
 
